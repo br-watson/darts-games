@@ -211,7 +211,7 @@ export const X01Tracker = () => {
     return (
         <Card className="w-full max-w-2xl">
             <CardHeader>
-                <CardTitle className="text-2xl">X01 Darts Tracker</CardTitle>
+                <CardTitle className="text-xl font-extrabold text-center">X01 Darts Tracker</CardTitle>
             </CardHeader>
             <CardContent>
                 {!gameStarted ? (
@@ -285,7 +285,7 @@ export const X01Tracker = () => {
                                         return (
                                             <div
                                                 key={index}
-                                                className={`flex items-center justify-between px-3 py-1.5 rounded-md bg-gray-100 ${
+                                                className={`flex items-center justify-between px-3 py-0 rounded-md bg-gray-100 ${
                                                     index === currentPlayerIndex ? 'ring-2 ring-blue-500' : ''
                                                 }`}
                                             >
