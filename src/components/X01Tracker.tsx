@@ -19,7 +19,7 @@ interface HistoryState {
 
 export const X01Tracker = () => {
     const [gameStarted, setGameStarted] = useState(false);
-    const [startingScore, setStartingScore] = useState(501);
+    const [startingScore, setStartingScore] = useState<number>(501);
     const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
     const [newPlayerName, setNewPlayerName] = useState('');
     const [currentThrow, setCurrentThrow] = useState('');
@@ -37,6 +37,14 @@ export const X01Tracker = () => {
 
     const quickScores = [60, 41, 26, 22, 11, 7];
 
+    // Add useEffect for keyboard listener
+    React.useEffect(() => {
+        document.addEventListener('keydown', handleKeyPress);
+        return () => {
+            document.removeEventListener('keydown', handleKeyPress);
+        };
+    }, [currentThrow, gameStarted, winner]);
+
     const handleKeyPress = (e: { key: string; }) => {
         // Only allow if game is started and no winner
         if (!gameStarted || winner) return;
@@ -47,14 +55,6 @@ export const X01Tracker = () => {
             setCurrentThrow(prev => prev.slice(0, -1));
         }
     };
-
-    // Add useEffect for keyboard listener
-    React.useEffect(() => {
-        document.addEventListener('keydown', handleKeyPress);
-        return () => {
-            document.removeEventListener('keydown', handleKeyPress);
-        };
-    }, [currentThrow, gameStarted, winner]);
 
     function isValidThreeDartScore(score: number) {
         // Special case handling
@@ -220,7 +220,10 @@ export const X01Tracker = () => {
                             <Input
                                 type="number"
                                 value={startingScore}
-                                onChange={(e) => setStartingScore(parseInt(e.target.value))}
+                                onChange={(e) => {
+                                    if (!isNaN(parseInt(e.target.value))) setStartingScore(parseInt(e.target.value));
+                                    else setStartingScore(0);
+                                }}
                                 className="w-32"
                                 min="101"
                                 step="100"
@@ -233,7 +236,7 @@ export const X01Tracker = () => {
                                 value={newPlayerName}
                                 onChange={(e) => setNewPlayerName(e.target.value)}
                                 placeholder="Player name"
-                                onKeyPress={(e) => e.key === 'Enter' && addPlayer()}
+                                onKeyUp={(e) => e.key === 'Enter' && addPlayer()}
                                 className="w-48"
                             />
                             <Button
@@ -262,7 +265,7 @@ export const X01Tracker = () => {
 
                         <Button
                             onClick={startGame}
-                            disabled={players.length < 1}
+                            disabled={players.length < 1 || startingScore < 2}
                             className="w-full"
                         >
                             Start Game
@@ -276,21 +279,26 @@ export const X01Tracker = () => {
                                 <Button onClick={resetGame}>New Game</Button>
                             </div>                            ) : (
                             <>
-                                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                <div className="flex flex-col gap-1">
                                     {players.map((player, index) => {
                                         const stats = calculateStats(player);
                                         return (
-                                            <Card key={index} className={`p-2 ${index === currentPlayerIndex ? 'ring-2 ring-blue-500' : ''}`}>
-                                                <div className="font-bold text-sm">{player.name}</div>
-                                                <div className="text-xl font-bold">{player.score}</div>
-                                                <div className="text-xs text-gray-500">
-                                                    Last: {player.throws.slice(-1)[0] || '-'}
+                                            <div
+                                                key={index}
+                                                className={`flex items-center justify-between px-3 py-1.5 rounded-md bg-gray-100 ${
+                                                    index === currentPlayerIndex ? 'ring-2 ring-blue-500' : ''
+                                                }`}
+                                            >
+                                                <div className="flex items-center gap-4">
+                                                    <span className="font-medium w-20 truncate">{player.name}</span>
+                                                    <span className="text-lg font-bold w-16">{player.score}</span>
+                                                    <span className="text-gray-600">Last: {player.throws.slice(-1)[0] || '-'}</span>
                                                 </div>
-                                                <div className="text-xs mt-1">
-                                                    <div>Avg: {stats.average}</div>
-                                                    <div>High: {stats.highest}</div>
+                                                <div className="flex gap-4 text-sm text-gray-600">
+                                                    <span>Avg: {stats.average}</span>
+                                                    <span>High: {stats.highest}</span>
                                                 </div>
-                                            </Card>
+                                            </div>
                                         );
                                     })}
                                 </div>
