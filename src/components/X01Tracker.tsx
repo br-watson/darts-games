@@ -28,6 +28,176 @@ export const X01Tracker = () => {
     const [history, setHistory] = useState<HistoryState[]>([]);
     const [isProcessingInput, setIsProcessingInput] = useState(false);
 
+    const getCheckoutSuggestion = (score: number): string => {
+        // Common checkout routes
+        const checkouts: Record<number, string> = {
+            170: "T20 T20 Bull",
+            167: "T20 T19 Bull",
+            164: "T20 T18 Bull",
+            161: "T20 T17 Bull",
+            160: "T20 T20 D20",
+            158: "T20 T20 D19",
+            157: "T20 T19 D20",
+            156: "T20 T20 D18",
+            155: "T20 T19 D19",
+            154: "T20 T18 D20",
+            153: "T20 T19 D18",
+            152: "T20 T20 D16",
+            151: "T20 T17 D20",
+            150: "T20 T18 D18",
+            149: "T20 T19 D16",
+            148: "T20 T16 D20",
+            147: "T20 T17 D18",
+            146: "T20 T18 D16",
+            145: "T20 T15 D20",
+            144: "T20 T20 D12",
+            143: "T20 T17 D16",
+            142: "T20 T14 D20",
+            141: "T20 T19 D12",
+            140: "T20 T20 D10",
+            139: "T20 T13 D20",
+            138: "T20 T18 D12",
+            137: "T20 T19 D10",
+            136: "T20 T20 D8",
+            135: "T20 T17 D12",
+            134: "T20 T14 D16",
+            133: "T20 T19 D8",
+            132: "T20 T16 D12",
+            131: "T20 T13 D16",
+            130: "T20 T18 D8",
+            129: "T19 T16 D12",
+            128: "T20 T20 D4",
+            127: "T20 T17 D8",
+            126: "T19 T19 D6",
+            125: "T20 T19 D4",
+            124: "T20 T16 D8",
+            123: "T19 T16 D9",
+            122: "T18 T20 D4",
+            121: "T20 T11 D14",
+            120: "T20 20 D20",
+            119: "T19 T10 D16",
+            118: "T20 18 D20",
+            117: "T20 17 D20",
+            116: "T20 16 D20",
+            115: "T20 15 D20",
+            114: "T20 14 D20",
+            113: "T20 13 D20",
+            112: "T20 12 D20",
+            111: "T20 11 D20",
+            110: "T20 10 D20",
+            109: "T20 9 D20",
+            108: "T20 8 D20",
+            107: "T19 10 D20",
+            106: "T20 6 D20",
+            105: "T20 5 D20",
+            104: "T20 4 D20",
+            103: "T20 3 D20",
+            102: "T20 2 D20",
+            101: "T20 1 D20",
+            100: "T20 D20",
+            99: "T19 10 D16",
+            98: "T20 D19",
+            97: "T19 D20",
+            96: "T20 D18",
+            95: "T19 D19",
+            94: "T18 D20",
+            93: "T19 D18",
+            92: "T20 D16",
+            91: "T17 D20",
+            90: "T18 D18",
+            89: "T19 D16",
+            88: "T16 D20",
+            87: "T17 D18",
+            86: "T18 D16",
+            85: "T15 D20",
+            84: "T20 D12",
+            83: "T17 D16",
+            82: "T14 D20",
+            81: "T19 D12",
+            80: "T20 D10",
+            79: "T13 D20",
+            78: "T18 D12",
+            77: "T19 D10",
+            76: "T20 D8",
+            75: "T17 D12",
+            74: "T14 D16",
+            73: "T19 D8",
+            72: "T16 D12",
+            71: "T13 D16",
+            70: "T18 D8",
+            69: "T19 D6",
+            68: "T20 D4",
+            67: "T17 D8",
+            66: "T10 D18",
+            65: "T19 D4",
+            64: "T16 D8",
+            63: "T13 D12",
+            62: "T10 D16",
+            61: "T15 D8",
+            60: "20 D20",
+            59: "19 D20",
+            58: "18 D20",
+            57: "17 D20",
+            56: "16 D20",
+            55: "15 D20",
+            54: "14 D20",
+            53: "13 D20",
+            52: "12 D20",
+            51: "11 D20",
+            50: "10 D20",
+            49: "9 D20",
+            48: "8 D20",
+            47: "15 D16",
+            46: "6 D20",
+            45: "5 D20",
+            44: "4 D20",
+            43: "3 D20",
+            42: "10 D16",
+            41: "9 D16",
+            40: "D20",
+            39: "7 D16",
+            38: "D19",
+            37: "5 D16",
+            36: "D18",
+            35: "3 D16",
+            34: "D17",
+            33: "1 D16",
+            32: "D16",
+            31: "15 D8",
+            30: "D15",
+            29: "13 D8",
+            28: "D14",
+            27: "11 D8",
+            26: "D13",
+            25: "9 D8",
+            24: "D12",
+            23: "7 D8",
+            22: "D11",
+            21: "5 D8",
+            20: "D10",
+            19: "3 D8",
+            18: "D9",
+            17: "1 D8",
+            16: "D8",
+            15: "7 D4",
+            14: "D7",
+            13: "5 D4",
+            12: "D6",
+            11: "3 D4",
+            10: "D5",
+            9: "1 D4",
+            8: "D4",
+            7: "3 D2",
+            6: "D3",
+            5: "1 D2",
+            4: "D2",
+            3: "1 D1",
+            2: "D1"
+        };
+
+        return checkouts[score] || "";
+    };
+
     // Calculate valid three-dart scores
     const validThreeDartScores = new Set();
     for (let i = 0; i <= 180; i++) {
@@ -40,22 +210,22 @@ export const X01Tracker = () => {
 
     // Add useEffect for keyboard listener
     React.useEffect(() => {
-        document.addEventListener('keydown', handleKeyPress);
-        return () => {
-            document.removeEventListener('keydown', handleKeyPress);
+        const handler = (e: KeyboardEvent) => {
+            if (isProcessingInput) return;
+            if (!gameStarted || winner) return;
+
+            if (e.key === 'Enter') {
+                handleThrow(parseInt(currentThrow));
+            } else if (e.key === 'Backspace') {
+                setCurrentThrow(prev => prev.slice(0, -1));
+            }
         };
-    }, [currentThrow, gameStarted, winner]);
 
-    const handleKeyPress = (e: { key: string; }) => {
-        // Only allow if game is started and no winner
-        if (!gameStarted || winner) return;
-
-        if (e.key === 'Enter') {
-            handleThrow(parseInt(currentThrow));
-        } else if (e.key === 'Backspace') {
-            setCurrentThrow(prev => prev.slice(0, -1));
-        }
-    };
+        document.addEventListener('keydown', handler);
+        return () => {
+            document.removeEventListener('keydown', handler);
+        };
+    }, [currentThrow, gameStarted, winner, isProcessingInput]);
 
     function isValidThreeDartScore(score: number) {
         // Special case handling
@@ -80,7 +250,7 @@ export const X01Tracker = () => {
     };
 
     const addPlayer = () => {
-        if (newPlayerName.trim() && players.length < 10 && !gameStarted) {
+        if (newPlayerName.trim() && players.length < 9 && !gameStarted) {
             setPlayers([...players, {
                 name: newPlayerName.trim(),
                 score: startingScore,
@@ -126,6 +296,7 @@ export const X01Tracker = () => {
         const currentPlayer = updatedPlayers[currentPlayerIndex];
         const newScore = currentPlayer.score - throwScore;
 
+        // Check for invalid scores - can't go to 1 or negative
         if (newScore < 0 || newScore === 1) {
             setCurrentThrow('');
             return;
@@ -204,12 +375,68 @@ export const X01Tracker = () => {
                             key={score}
                             variant="outline"
                             className="h-12"
-                            onClick={() => handleThrow(score)}
+                            onClick={() => {
+                                if (isProcessingInput) return;
+                                setIsProcessingInput(true);
+                                handleThrow(score);
+                                setTimeout(() => setIsProcessingInput(false), 100);
+                            }}
                         >
                             {score}
                         </Button>
                     ))}
                 </div>
+            </div>
+        );
+    };
+
+    // Render active player (current player)
+    const CurrentPlayerCard = () => {
+        const currentPlayer = players[currentPlayerIndex];
+        const stats = calculateStats(currentPlayer);
+        const checkout = getCheckoutSuggestion(currentPlayer.score);
+
+        return (
+            <div className="mb-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                <div className="flex justify-between items-center mb-2">
+                    <div className="text-xl font-bold">{currentPlayer.name}'s Turn</div>
+                    <div className="text-2xl font-extrabold">{currentPlayer.score}</div>
+                </div>
+                <div className="grid grid-cols-4 gap-2 text-sm">
+                    <div>Avg: {stats.average}</div>
+                    <div className="text-center">High: {stats.highest}</div>
+                    <div className="text-right">Last: {currentPlayer.throws.slice(-1)[0] || '-'}</div>
+                    <div className="text-right text-gray-400">{currentPlayerIndex + 1}</div>
+                </div>
+                {checkout && (
+                    <div className="mt-2 p-1 bg-green-100 text-green-800 text-sm font-medium rounded">
+                        Checkout: {checkout}
+                    </div>
+                )}
+            </div>
+        );
+    };
+
+    // Render other players in a compact grid
+    const OtherPlayersGrid = () => {
+        return (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 mb-4">
+                {players.map((player, index) => {
+                    if (index === currentPlayerIndex) return null;
+
+                    return (
+                        <div key={index} className="p-2 bg-gray-100 rounded border">
+                            <div className="flex justify-between">
+                                <span className="font-medium truncate">{player.name}</span>
+                                <span className="font-bold">{player.score}</span>
+                            </div>
+                            <div className="text-sm text-gray-600 flex justify-between">
+                                <span>Last: {player.throws.slice(-1)[0] || '-'}</span>
+                                <span className="text-xs text-gray-400">{index + 1}</span>
+                            </div>
+                        </div>
+                    );
+                })}
             </div>
         );
     };
@@ -247,7 +474,7 @@ export const X01Tracker = () => {
                             />
                             <Button
                                 onClick={addPlayer}
-                                disabled={players.length >= 10}
+                                disabled={players.length >= 9}
                             >
                                 <Plus className="w-4 h-4 mr-2" />
                                 Add Player
@@ -276,80 +503,56 @@ export const X01Tracker = () => {
                         >
                             Start Game
                         </Button>
-                    </div>                    ) : (
+                    </div>
+                ) : (
                     <div className="space-y-4">
                         {winner ? (
                             <div className="text-center py-8 space-y-4">
                                 <Trophy className="w-16 h-16 mx-auto text-yellow-500" />
                                 <h2 className="text-2xl font-bold">{winner.name} Wins!</h2>
                                 <Button onClick={resetGame}>New Game</Button>
-                            </div>                            ) : (
+                            </div>
+                        ) : (
                             <>
-                                <div className="flex flex-col gap-1">
-                                    {players.map((player, index) => {
-                                        const stats = calculateStats(player);
-                                        return (
-                                            <div
-                                                key={index}
-                                                className={`flex items-center justify-between px-3 py-0 rounded-md bg-gray-100 ${
-                                                    index === currentPlayerIndex ? 'ring-2 ring-blue-500' : ''
-                                                }`}
-                                            >
-                                                <div className="flex items-center gap-4">
-                                                    <span className="font-medium w-20 truncate">{player.name}</span>
-                                                    <span className="text-lg font-bold w-16">{player.score}</span>
-                                                    <span className="text-gray-600">Last: {player.throws.slice(-1)[0] || '-'}</span>
-                                                </div>
-                                                <div className="flex gap-4 text-sm text-gray-600">
-                                                    <span>Avg: {stats.average}</span>
-                                                    <span>High: {stats.highest}</span>
-                                                </div>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
+                                {/* Updated player display section */}
+                                <CurrentPlayerCard />
+                                <OtherPlayersGrid />
 
-                                <div className="flex flex-col items-center gap-4">
-                                    <div className="text-xl font-bold">
-                                        {players[currentPlayerIndex].name}'s Turn
-                                    </div>
-
-                                    <div className="flex items-center gap-2 w-full max-w-md">
-                                        <Input
-                                            value={currentThrow}
-                                            onChange={(e) => {
-                                                const value = e.target.value.replace(/[^0-9]/g, '');
-                                                if (value.length <= 3) {
-                                                    setCurrentThrow(value);
-                                                }
-                                            }}
-                                            placeholder="Score (0-180)"
-                                            className="text-2xl text-center h-16"
-                                            style={{
-                                                appearance: 'textfield',
-                                                MozAppearance: 'textfield'
-                                            }}
-                                        />
-                                        <Button
-                                            onClick={() => handleUndo()}
-                                            disabled={history.length === 0}
-                                            variant="outline"
-                                            className="h-16 w-16"
-                                        >
-                                            <RotateCcw className="w-6 h-6" />
-                                        </Button>
-                                    </div>
-
-                                    <NumPad />
-
-                                    <Button variant="outline" onClick={resetGame} className="mt-2">
-                                        Reset Game
+                                <div className="flex items-center gap-2 w-full max-w-md mx-auto">
+                                    <Input
+                                        value={currentThrow}
+                                        onChange={(e) => {
+                                            const value = e.target.value.replace(/[^0-9]/g, '');
+                                            if (value.length <= 3) {
+                                                setCurrentThrow(value);
+                                            }
+                                        }}
+                                        placeholder="Score (0-180)"
+                                        className="text-2xl text-center h-16"
+                                        style={{
+                                            appearance: 'textfield',
+                                            MozAppearance: 'textfield'
+                                        }}
+                                    />
+                                    <Button
+                                        onClick={() => handleUndo()}
+                                        disabled={history.length === 0}
+                                        variant="outline"
+                                        className="h-16 w-16"
+                                    >
+                                        <RotateCcw className="w-6 h-6" />
                                     </Button>
                                 </div>
+
+                                <NumPad />
+
+                                <Button variant="outline" onClick={resetGame} className="mt-2">
+                                    Reset Game
+                                </Button>
                             </>
-                            )}
+                        )}
                     </div>
-                    )}
+                )}
             </CardContent>
         </Card>
     );
