@@ -126,7 +126,7 @@ export const X01Tracker = () => {
         const currentPlayer = updatedPlayers[currentPlayerIndex];
         const newScore = currentPlayer.score - throwScore;
 
-        if (newScore < 0) {
+        if (newScore < 0 || newScore === 1) {
             setCurrentThrow('');
             return;
         }
