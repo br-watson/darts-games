@@ -341,7 +341,7 @@ export const X01Tracker = () => {
 
         return (
             <div className="space-y-4">
-                <div className="grid grid-cols-3 gap-3 max-w-md mx-auto">
+                <div className="grid grid-cols-3 gap-2 max-w-full mx-auto">
                     {buttons.map((row, i) => (
                         row.map((btn, j) => (
                             <Button
@@ -369,7 +369,7 @@ export const X01Tracker = () => {
                     ))}
                 </div>
 
-                <div className="grid grid-cols-3 gap-2 max-w-md mx-auto">
+                <div className="grid grid-cols-3 gap-2 max-w-full mx-auto">
                     {quickScores.map(score => (
                         <Button
                             key={score}
@@ -442,7 +442,7 @@ export const X01Tracker = () => {
     };
 
     return (
-        <Card className="w-full max-w-2xl">
+        <Card className="w-full max-w-full sm:max-w-2xl mx-auto">
             <CardHeader>
                 <CardTitle className="text-xl font-extrabold text-center">X01 Darts Tracker</CardTitle>
             </CardHeader>
