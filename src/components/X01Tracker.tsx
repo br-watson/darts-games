@@ -26,6 +26,7 @@ export const X01Tracker = () => {
     const [winner, setWinner] = useState<Player | null>(null);
     const [players, setPlayers] = useState<Player[]>([]);
     const [history, setHistory] = useState<HistoryState[]>([]);
+    const [isProcessingInput, setIsProcessingInput] = useState(false);
 
     // Calculate valid three-dart scores
     const validThreeDartScores = new Set();
@@ -177,6 +178,9 @@ export const X01Tracker = () => {
                                 className="h-16 text-2xl"
                                 variant={btn === 'Enter' ? "default" : "outline"}
                                 onClick={() => {
+                                    if (isProcessingInput) return;
+                                    setIsProcessingInput(true);
+
                                     if (btn === '←') {
                                         setCurrentThrow(prev => prev.slice(0, -1));
                                     } else if (btn === 'Enter') {
@@ -184,6 +188,8 @@ export const X01Tracker = () => {
                                     } else if (currentThrow.length < 3) {
                                         setCurrentThrow(currentThrow + btn.toString());
                                     }
+
+                                    setTimeout(() => setIsProcessingInput(false), 100);
                                 }}
                             >
                                 {btn}
