@@ -1,4 +1,4 @@
-export const checkouts: Record<number, string> = {
+export const checkouts: Readonly<Record<number, string>> = {
     170: "T20 T20 Bull",
     167: "T20 T19 Bull",
     164: "T20 T18 Bull",
