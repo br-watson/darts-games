@@ -27,6 +27,7 @@ export const X01Tracker = () => {
     const [players, setPlayers] = useState<Player[]>([]);
     const [history, setHistory] = useState<HistoryState[]>([]);
     const [isProcessingInput, setIsProcessingInput] = useState(false);
+    const [showResetConfirm, setShowResetConfirm] = useState(false);
 
     const getCheckoutSuggestion = (score: number): string => {
         // Common checkout routes
@@ -518,7 +519,7 @@ export const X01Tracker = () => {
                                 <CurrentPlayerCard />
                                 <OtherPlayersGrid />
 
-                                <div className="flex items-center gap-2 w-full max-w-md mx-auto">
+                                <div className="flex items-center gap-2 w-full max-w-full mx-auto">
                                     <Input
                                         value={currentThrow}
                                         onChange={(e) => {
@@ -538,7 +539,7 @@ export const X01Tracker = () => {
                                         onClick={() => handleUndo()}
                                         disabled={history.length === 0}
                                         variant="outline"
-                                        className="h-16 w-16"
+                                        className="h-16 w-32"
                                     >
                                         <RotateCcw className="w-6 h-6" />
                                     </Button>
@@ -546,9 +547,37 @@ export const X01Tracker = () => {
 
                                 <NumPad />
 
-                                <Button variant="outline" onClick={resetGame} className="mt-2">
+                                <Button
+                                    variant="outline"
+                                    onClick={() => setShowResetConfirm(true)}
+                                    className="mt-2"
+                                >
                                     Reset Game
                                 </Button>
+
+                                {/* Add this confirmation dialog */}
+                                {showResetConfirm && (
+                                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                                        <div className="bg-white p-4 rounded-lg shadow-lg max-w-sm w-full">
+                                            <h3 className="font-bold mb-4">Reset Game?</h3>
+                                            <p className="mb-4">Are you sure you want to reset the game? All progress will be lost.</p>
+                                            <div className="flex justify-end gap-2">
+                                                <Button variant="outline" onClick={() => setShowResetConfirm(false)}>
+                                                    Cancel
+                                                </Button>
+                                                <Button
+                                                    variant="destructive"
+                                                    onClick={() => {
+                                                        resetGame();
+                                                        setShowResetConfirm(false);
+                                                    }}
+                                                >
+                                                    Reset
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
                             </>
                         )}
                     </div>
