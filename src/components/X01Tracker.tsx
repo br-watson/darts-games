@@ -223,7 +223,7 @@ export const X01Tracker = () => {
         }
     }
 
-    const quickScores = [60, 41, 26, 22, 11, 7];
+    const quickScores = [100, 60, 41, 26, 22, 11];
 
     React.useEffect(() => {
         const savedPlayers = localStorage.getItem('x01Players');
@@ -454,7 +454,7 @@ export const X01Tracker = () => {
                         <Button
                             key={score}
                             variant="outline"
-                            className="h-12"
+                            className="h-12 font-bold"
                             onClick={() => {
                                 if (isProcessingInput) return;
                                 setIsProcessingInput(true);
@@ -470,7 +470,50 @@ export const X01Tracker = () => {
         );
     };
 
-    // Render active player (current player)
+    const CheckoutDisplay = ({ checkout }: { checkout: string }) => {
+        if (!checkout) return null;
+        const parts = checkout.split(' ');
+
+        return (
+            <div className="mt-2 p-2 bg-gradient-to-r from-green-100 to-blue-100 rounded-lg shadow-md">
+                <div className="flex justify-center items-center space-x-2">
+                    <div className="text-lg font-bold text-center mb-1">Checkout: </div>
+                    {parts.map((part: string, index: number) => {
+                        const isTriple = part.startsWith('T');
+                        const isDouble = part.startsWith('D');
+                        const isBull = part === 'Bull';
+
+                        let bgColor = "bg-gray-200";
+                        let textColor = "text-gray-800";
+                        let extraClasses = "";
+
+                        if (isTriple) {
+                            bgColor = "bg-red-500";
+                            textColor = "text-white";
+                        } else if (isDouble) {
+                            bgColor = "bg-green-500";
+                            textColor = "text-white";
+                        } else if (isBull) {
+                            bgColor = "";
+                            textColor = "text-white";
+                            extraClasses = "animate-pulse bg-gradient-to-r from-red-500 via-yellow-500 to-green-500 border-2 border-white";
+                        }
+
+                        return (
+                            <div
+                                key={index}
+                                className={`${bgColor} ${textColor} ${extraClasses} px-3 py-1 rounded-full text-center font-bold animate-none`}
+                                style={isBull ? { backgroundSize: "200% 200%", animation: "gradient 2s ease infinite" } : {}}
+                            >
+                                {part}
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+        );
+    };
+
     const CurrentPlayerCard = () => {
         const currentPlayer = players[currentPlayerIndex];
         const stats = calculateStats(currentPlayer);
@@ -488,11 +531,7 @@ export const X01Tracker = () => {
                     <div className="text-right">Last: {currentPlayer.throws.slice(-1)[0] || '-'}</div>
                     <div className="text-right text-gray-400">{currentPlayerIndex + 1}</div>
                 </div>
-                {checkout && (
-                    <div className="mt-2 p-1 bg-green-100 text-green-800 text-sm font-medium rounded">
-                        Checkout: {checkout}
-                    </div>
-                )}
+                {checkout && <CheckoutDisplay checkout={checkout} />}
             </div>
         );
     };
