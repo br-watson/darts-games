@@ -14,4 +14,4 @@ Hosted locally on [http://localhost:3000](http://localhost:3000).
 
 ## Deployment
 
-GitHub Pages: [https://br-watson.github.io/darts-scorer-app](https://br-watson.github.io/darts-scorer-app/)
+GitHub Pages: [https://br-watson.github.io/darts-games](https://br-watson.github.io/darts-games/)

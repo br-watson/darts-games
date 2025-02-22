@@ -6,8 +6,8 @@ const nextConfig: NextConfig = {
     images: {
         unoptimized: true, // Disable Next.js image optimization (GitHub Pages doesn't support it)
     },
-    basePath: "/darts-scorer-app", // Set base path for GitHub Pages
-    assetPrefix: "/darts-scorer-app/",
+    basePath: "/darts-games", // Set base path for GitHub Pages
+    assetPrefix: "/darts-games/",
     generateBuildId: async () => {
         return `${new Date().getTime()}`;
     },
