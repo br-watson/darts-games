@@ -36,6 +36,40 @@ export const NumPad: React.FC<NumPadProps> = ({
         [getBackspaceButtonText(), 0, 'Enter']
     ];
 
+    // Define colorful button styles
+    const getButtonStyle = (btn: number | string) => {
+        const isBustButton = btn === 'BUST';
+        const isBackspaceButton = btn === '←';
+        const isEnterButton = btn === 'Enter';
+
+        if (isBustButton) {
+            return "bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white border-0";
+        } else if (isBackspaceButton) {
+            return "bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-500 hover:to-orange-500 text-white border-0";
+        } else if (isEnterButton) {
+            return "bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white border-0";
+        } else {
+            // For number buttons, create a subtle gradient
+            return "bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 text-gray-800 border-2 border-blue-200";
+        }
+    };
+
+    // Define quick score button styles
+    const getQuickScoreStyle = (score: number) => {
+        // Create colorful styles based on score value
+        if (score >= 100) {
+            return "bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white border-0";
+        } else if (score >= 60) {
+            return "bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white border-0";
+        } else if (score >= 40) {
+            return "bg-gradient-to-r from-teal-500 to-green-500 hover:from-teal-600 hover:to-green-600 text-white border-0";
+        } else if (score >= 20) {
+            return "bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-white border-0";
+        } else {
+            return "bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white border-0";
+        }
+    };
+
     return (
         <div className="space-y-4">
             <div className="grid grid-cols-3 gap-2 max-w-full mx-auto">
@@ -43,12 +77,12 @@ export const NumPad: React.FC<NumPadProps> = ({
                     row.map((btn, j) => {
                         const isBustButton = btn === 'BUST';
                         const isBackspaceButton = btn === '←';
+                        const customClass = getButtonStyle(btn);
 
                         return (
                             <Button
                                 key={`${i}-${j}`}
-                                className={`h-16 text-2xl ${isBustButton ? "bg-red-500 hover:bg-red-600" : ""}`}
-                                variant={(btn === 'Enter' || isBustButton) ? "default" : "outline"}
+                                className={`h-16 text-2xl shadow-md transition-all ${customClass}`}
                                 onClick={() => {
                                     if (isProcessingInput) return;
                                     setIsProcessingInput(true);
@@ -74,21 +108,24 @@ export const NumPad: React.FC<NumPadProps> = ({
             </div>
 
             <div className="grid grid-cols-3 gap-2 max-w-full mx-auto">
-                {quickScores.map(score => (
-                    <Button
-                        key={score}
-                        variant="outline"
-                        className="h-12 font-bold"
-                        onClick={() => {
-                            if (isProcessingInput) return;
-                            setIsProcessingInput(true);
-                            handleThrow(score);
-                            setTimeout(() => setIsProcessingInput(false), 100);
-                        }}
-                    >
-                        {score}
-                    </Button>
-                ))}
+                {quickScores.map(score => {
+                    const customClass = getQuickScoreStyle(score);
+
+                    return (
+                        <Button
+                            key={score}
+                            className={`h-12 font-bold shadow-sm hover:shadow-md transition-all ${customClass}`}
+                            onClick={() => {
+                                if (isProcessingInput) return;
+                                setIsProcessingInput(true);
+                                handleThrow(score);
+                                setTimeout(() => setIsProcessingInput(false), 100);
+                            }}
+                        >
+                            {score}
+                        </Button>
+                    );
+                })}
             </div>
         </div>
     );

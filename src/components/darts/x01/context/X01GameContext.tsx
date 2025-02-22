@@ -108,7 +108,7 @@ export const X01GameProvider: React.FC<{ children: React.ReactNode }> = ({ child
         currentPlayer.score = newScore;
 
         if (throwScore === 26) {
-            triggerCelebration(`${currentPlayer.name} hit a perfect 26!`);
+            triggerCelebration(`${currentPlayer.name} hit a 26... again.`);
         }
 
         if (newScore === 0) {

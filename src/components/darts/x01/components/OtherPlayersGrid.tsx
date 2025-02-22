@@ -1,5 +1,6 @@
 import React from 'react';
 import { useX01GameContext } from '../context/X01GameContext';
+import { dartsColors } from '@/lib/theme';
 
 export const OtherPlayersGrid: React.FC = () => {
     const { players, currentPlayerIndex } = useX01GameContext();
@@ -9,15 +10,40 @@ export const OtherPlayersGrid: React.FC = () => {
             {players.map((player, index) => {
                 if (index === currentPlayerIndex) return null;
 
+                // Get player color based on index
+                const playerColor = dartsColors.players[index % dartsColors.players.length];
+
                 return (
-                    <div key={index} className="p-2 bg-gray-100 rounded border">
+                    <div
+                        key={index}
+                        className="p-3 rounded-lg shadow-sm border transition-all hover:shadow-md"
+                        style={{
+                            background: `linear-gradient(135deg, ${playerColor}10, ${playerColor}20)`,
+                            borderColor: playerColor,
+                            borderWidth: '2px'
+                        }}
+                    >
                         <div className="flex justify-between">
-                            <span className="font-medium truncate">{player.name}</span>
-                            <span className="font-bold">{player.score}</span>
+                            <span
+                                className="font-medium truncate"
+                                style={{ color: playerColor }}
+                            >
+                                {player.name}
+                            </span>
+                            <span
+                                className="font-bold px-2 py-0.5 rounded-lg text-white"
+                                style={{ backgroundColor: playerColor }}
+                            >
+                                {player.score}
+                            </span>
                         </div>
-                        <div className="text-sm text-gray-600 flex justify-between">
-                            <span>Last: {player.throws.slice(-1)[0] || '-'}</span>
-                            <span className="text-xs text-gray-400">{index + 1}</span>
+                        <div className="flex justify-between mt-1">
+                            <span className="text-sm bg-white bg-opacity-70 px-2 py-0.5 rounded-md">
+                                Last: <span className="font-semibold">{player.throws.slice(-1)[0] || '-'}</span>
+                            </span>
+                            <span className="text-xs text-gray-500 bg-white bg-opacity-70 px-2 py-0.5 rounded-md">
+                                #{index + 1}
+                            </span>
                         </div>
                     </div>
                 );
