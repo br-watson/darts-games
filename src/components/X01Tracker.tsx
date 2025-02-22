@@ -17,6 +17,11 @@ interface HistoryState {
     currentPlayerIndex: number;
 }
 
+interface CelebrationState {
+    show: boolean;
+    message: string;
+}
+
 export const X01Tracker = () => {
     const [gameStarted, setGameStarted] = useState(false);
     const [startingScore, setStartingScore] = useState<number>(501);
@@ -28,6 +33,17 @@ export const X01Tracker = () => {
     const [history, setHistory] = useState<HistoryState[]>([]);
     const [isProcessingInput, setIsProcessingInput] = useState(false);
     const [showResetConfirm, setShowResetConfirm] = useState(false);
+    const [celebration, setCelebration] = useState<CelebrationState>({
+        show: false,
+        message: ''
+    });
+
+    const triggerCelebration = (message: string) => {
+        setCelebration({ show: true, message });
+        setTimeout(() => {
+            setCelebration({ show: false, message: '' });
+        }, 3000);
+    };
 
     const getCheckoutSuggestion = (score: number): string => {
         // Common checkout routes
@@ -312,6 +328,10 @@ export const X01Tracker = () => {
         currentPlayer.throws.push(throwScore);
         currentPlayer.score = newScore;
 
+        if (throwScore === 26) {
+            triggerCelebration(`${currentPlayer.name} hit a perfect 26!`);
+        }
+
         if (newScore === 0) {
             setWinner(currentPlayer);
         } else {
@@ -330,6 +350,39 @@ export const X01Tracker = () => {
             setHistory(history.slice(0, -1));
             setWinner(null);
         }
+    };
+
+    const CelebrationAnimation = () => {
+        if (!celebration.show) return null;
+
+        return (
+            <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
+                <div className="relative">
+                    {/* Background */}
+                    <div className="absolute inset-0 bg-yellow-400 opacity-70 rounded-lg blur-sm"></div>
+
+                    {/* Wacky confetti */}
+                    <div className="absolute -top-8 -left-8 w-4 h-4 bg-red-500 rounded-full animate-ping"></div>
+                    <div className="absolute -top-12 left-0 w-3 h-3 bg-blue-500 rounded-full animate-ping"></div>
+                    <div className="absolute -top-10 left-8 w-5 h-5 bg-green-500 rounded-full animate-ping"></div>
+                    <div className="absolute -top-6 -right-8 w-4 h-4 bg-purple-500 rounded-full animate-ping"></div>
+                    <div className="absolute -top-12 right-0 w-6 h-6 bg-pink-500 rounded-full animate-ping"></div>
+                    <div className="absolute -top-10 right-8 w-3 h-3 bg-indigo-500 rounded-full animate-ping"></div>
+
+                    <div className="absolute -bottom-8 -left-8 w-5 h-5 bg-red-400 rounded-full animate-ping"></div>
+                    <div className="absolute -bottom-12 left-0 w-4 h-4 bg-blue-400 rounded-full animate-ping"></div>
+                    <div className="absolute -bottom-10 left-8 w-3 h-3 bg-green-400 rounded-full animate-ping"></div>
+                    <div className="absolute -bottom-6 -right-8 w-5 h-5 bg-purple-400 rounded-full animate-ping"></div>
+                    <div className="absolute -bottom-12 right-0 w-3 h-3 bg-pink-400 rounded-full animate-ping"></div>
+                    <div className="absolute -bottom-10 right-8 w-4 h-4 bg-indigo-400 rounded-full animate-ping"></div>
+
+                    {/* Main content */}
+                    <div className="relative bg-yellow-400 bg-opacity-80 text-black font-bold text-2xl p-6 rounded-lg shadow-lg animate-bounce border-2 border-yellow-600">
+                        {celebration.message}
+                    </div>
+                </div>
+            </div>
+        );
     };
 
     const NumPad = () => {
@@ -583,6 +636,7 @@ export const X01Tracker = () => {
                     </div>
                 )}
             </CardContent>
+            {celebration.show && <CelebrationAnimation />}
         </Card>
     );
 };
