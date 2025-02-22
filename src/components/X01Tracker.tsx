@@ -225,6 +225,13 @@ export const X01Tracker = () => {
 
     const quickScores = [60, 41, 26, 22, 11, 7];
 
+    React.useEffect(() => {
+        const savedPlayers = localStorage.getItem('x01Players');
+        if (savedPlayers) {
+            setPlayers(JSON.parse(savedPlayers));
+        }
+    }, []);
+
     // Add useEffect for keyboard listener
     React.useEffect(() => {
         const handler = (e: KeyboardEvent) => {
@@ -268,19 +275,22 @@ export const X01Tracker = () => {
 
     const addPlayer = () => {
         if (newPlayerName.trim() && players.length < 9 && !gameStarted) {
-            setPlayers([...players, {
+            const updatedPlayers = [...players, {
                 name: newPlayerName.trim(),
                 score: startingScore,
                 throws: []
-            }]);
+            }];
+            setPlayers(updatedPlayers);
+            localStorage.setItem('x01Players', JSON.stringify(updatedPlayers));
             setNewPlayerName('');
         }
     };
 
     const removePlayer = (index: number) => {
         if (!gameStarted) {
-            setPlayers(players.filter((_, i) => i !== index));
-        }
+            const updatedPlayers = players.filter((_, i) => i !== index);
+            setPlayers(updatedPlayers);
+            localStorage.setItem('x01Players', JSON.stringify(updatedPlayers));        }
     };
 
     const startGame = () => {
@@ -291,12 +301,14 @@ export const X01Tracker = () => {
     };
 
     const resetGame = () => {
-        setGameStarted(false);
-        setPlayers(players.map(player => ({
+        const resetPlayers = players.map(player => ({
             ...player,
             score: startingScore,
             throws: []
-        })));
+        }));
+        setGameStarted(false);
+        setPlayers(resetPlayers);
+        localStorage.setItem('x01Players', JSON.stringify(resetPlayers));
         const randomIndex = Math.floor(Math.random() * players.length);
         setCurrentPlayerIndex(randomIndex);
         setWinner(null);
