@@ -1,9 +1,11 @@
 import React from 'react';
-import { useGameContext } from '@/components/darts/context/GameContext';
+import { CelebrationState } from '../types/ui-state';
 
-export const CelebrationAnimation: React.FC = () => {
-    const { celebration } = useGameContext();
+interface CelebrationAnimationProps {
+    celebration: CelebrationState;
+}
 
+export const CelebrationAnimation: React.FC<CelebrationAnimationProps> = ({ celebration }) => {
     if (!celebration.show) return null;
 
     return (

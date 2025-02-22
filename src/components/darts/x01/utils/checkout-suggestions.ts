@@ -1,3 +1,5 @@
+import { Player } from '@/components/darts/common/types/player';
+
 export const checkouts: Readonly<Record<number, string>> = {
     170: "T20 T20 Bull",
     167: "T20 T19 Bull",
@@ -165,4 +167,22 @@ export const checkouts: Readonly<Record<number, string>> = {
 
 export const getCheckoutSuggestion = (score: number): string => {
     return checkouts[score] || "";
+};
+
+export const quickScores = [100, 60, 41, 26, 22, 11];
+
+// Calculate X01 specific stats from throws
+export const calculateX01Stats = (player: Player) => {
+    if (!player.throws.length) return { average: '0', highest: 0, tons: 0, ton40s: 0, ton80s: 0 };
+
+    const throws = player.throws;
+    const tons = throws.filter(t => t >= 100 && t < 140).length;
+    const ton40s = throws.filter(t => t >= 140 && t < 180).length;
+    const ton80s = throws.filter(t => t === 180).length;
+
+    return {
+        tons,
+        ton40s,
+        ton80s
+    };
 };

@@ -1,18 +1,20 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Player, HistoryState, CelebrationState, CheckoutDartPromptState, GameContextType } from '../types';
-import { calculateValidThreeDartScores } from '../utils/score-utils';
+import { Player, HistoryState } from '../../common/types/player';
+import { CelebrationState } from '../../common/types/ui-state';
+import { CheckoutDartPromptState, X01GameContextType } from '../types';
+import { calculateValidThreeDartScores } from '../../common/utils/score-utils';
 
-const GameContext = createContext<GameContextType | undefined>(undefined);
+const X01GameContext = createContext<X01GameContextType | undefined>(undefined);
 
-export const useGameContext = () => {
-    const context = useContext(GameContext);
+export const useX01GameContext = () => {
+    const context = useContext(X01GameContext);
     if (!context) {
-        throw new Error('useGameContext must be used within a GameProvider');
+        throw new Error('useX01GameContext must be used within an X01GameProvider');
     }
     return context;
 };
 
-export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const X01GameProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [gameStarted, setGameStarted] = useState(false);
     const [startingScore, setStartingScore] = useState<number>(501);
     const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
@@ -117,6 +119,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const currentPlayer = updatedPlayers[currentPlayerIndex];
         const newScore = currentPlayer.score - throwScore;
 
+        // Check for invalid scores - can't go to 1 or negative
         if (newScore < 0 || newScore === 1) {
             setCurrentThrow('');
             return;
@@ -158,7 +161,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     };
 
-    const contextValue: GameContextType = {
+    const contextValue: X01GameContextType = {
         // State
         gameStarted,
         startingScore,
@@ -196,8 +199,8 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     return (
-        <GameContext.Provider value={contextValue}>
+        <X01GameContext.Provider value={contextValue}>
             {children}
-        </GameContext.Provider>
+        </X01GameContext.Provider>
     );
 };

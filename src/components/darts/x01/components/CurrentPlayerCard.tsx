@@ -1,16 +1,16 @@
 import React from 'react';
-import { useGameContext } from '@/components/darts/context/GameContext';
-import { calculateStats } from '../utils/score-utils';
+import { useX01GameContext } from '../context/X01GameContext';
+import { calculateBasicStats } from '../../common/utils/score-utils';
 import { getCheckoutSuggestion } from '../utils/checkout-suggestions';
 import { CheckoutDisplay } from './CheckoutDisplay';
 
 export const CurrentPlayerCard: React.FC = () => {
-    const { players, currentPlayerIndex } = useGameContext();
+    const { players, currentPlayerIndex } = useX01GameContext();
     const currentPlayer = players[currentPlayerIndex];
 
     if (!currentPlayer) return null;
 
-    const stats = calculateStats(currentPlayer);
+    const stats = calculateBasicStats(currentPlayer);
     const checkout = getCheckoutSuggestion(currentPlayer.score);
 
     return (

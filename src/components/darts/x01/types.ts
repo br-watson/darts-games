@@ -1,21 +1,6 @@
 import React from 'react';
-
-export interface Player {
-    name: string;
-    score: number;
-    throws: number[];
-    checkoutDart?: 1 | 2 | 3;
-}
-
-export interface HistoryState {
-    players: Player[];
-    currentPlayerIndex: number;
-}
-
-export interface CelebrationState {
-    show: boolean;
-    message: string;
-}
+import { Player, HistoryState } from '../common/types/player';
+import { CelebrationState } from '../common/types/ui-state';
 
 export interface CheckoutDartPromptState {
     show: boolean;
@@ -23,7 +8,7 @@ export interface CheckoutDartPromptState {
     score: number;
 }
 
-export interface GameContextType {
+export interface X01GameContextType {
     // State
     gameStarted: boolean;
     startingScore: number;
@@ -37,6 +22,7 @@ export interface GameContextType {
     showResetConfirm: boolean;
     celebration: CelebrationState;
     checkoutDartPrompt: CheckoutDartPromptState | null;
+    validThreeDartScores: Set<number>;
 
     // State setters
     setGameStarted: React.Dispatch<React.SetStateAction<boolean>>;
@@ -57,5 +43,12 @@ export interface GameContextType {
     resetGame: () => void;
     handleThrow: (score: number | string) => void;
     handleUndo: () => void;
-    validThreeDartScores: Set<number>;
+}
+
+export interface X01Stats {
+    average: string;
+    highest: number;
+    tons?: number;
+    ton40s?: number;
+    ton80s?: number;
 }

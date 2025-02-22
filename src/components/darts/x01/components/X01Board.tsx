@@ -3,14 +3,15 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Plus, X, RotateCcw, Trophy } from 'lucide-react';
-import { useGameContext } from '@/components/darts/context/GameContext';
-import { NumPad } from './NumPad';
+import { useX01GameContext } from '../context/X01GameContext';
+import { NumPad } from '../../common/components/NumPad';
 import { CurrentPlayerCard } from './CurrentPlayerCard';
 import { OtherPlayersGrid } from './OtherPlayersGrid';
 import { CheckoutDartPrompt } from './CheckoutDartPrompt';
-import { CelebrationAnimation } from './CelebrationAnimation';
+import { CelebrationAnimation } from '../../common/components/CelebrationAnimation';
+import { quickScores } from '../utils/checkout-suggestions';
 
-export const MainStack: React.FC = () => {
+export const X01Board: React.FC = () => {
     const {
         gameStarted,
         startingScore,
@@ -22,14 +23,19 @@ export const MainStack: React.FC = () => {
         winner,
         players,
         history,
+        isProcessingInput,
+        currentPlayerIndex,
+        setIsProcessingInput,
         showResetConfirm,
         setShowResetConfirm,
+        celebration,
         addPlayer,
         removePlayer,
         startGame,
         resetGame,
+        handleThrow,
         handleUndo
-    } = useGameContext();
+    } = useX01GameContext();
 
     return (
         <Card className="w-full max-w-full sm:max-w-2xl mx-auto">
@@ -135,7 +141,16 @@ export const MainStack: React.FC = () => {
                                     </Button>
                                 </div>
 
-                                <NumPad />
+                                <NumPad
+                                    currentPlayerIndex={currentPlayerIndex}
+                                    players={players}
+                                    currentThrow={currentThrow}
+                                    setCurrentThrow={setCurrentThrow}
+                                    handleThrow={handleThrow}
+                                    isProcessingInput={isProcessingInput}
+                                    setIsProcessingInput={setIsProcessingInput}
+                                    quickScores={quickScores}
+                                />
 
                                 <Button
                                     variant="outline"
@@ -176,7 +191,7 @@ export const MainStack: React.FC = () => {
                 )}
             </CardContent>
             <CheckoutDartPrompt />
-            <CelebrationAnimation />
+            {celebration.show && <CelebrationAnimation celebration={celebration} />}
         </Card>
     );
 };

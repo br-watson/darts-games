@@ -1,11 +1,12 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Trophy } from 'lucide-react';
-import { calculateDetailedStats } from '../utils/score-utils';
-import { useGameContext } from '@/components/darts/context/GameContext';
+import { calculateDetailedStats } from '../../common/utils/score-utils';
+import { useX01GameContext } from '../context/X01GameContext';
+import { calculateX01Stats } from '@/components/darts/x01/utils/checkout-suggestions';
 
-export const GameStatsScreen: React.FC = () => {
-    const { players, startingScore, resetGame } = useGameContext();
+export const X01StatsScreen: React.FC = () => {
+    const { players, startingScore, resetGame } = useX01GameContext();
 
     const sortedPlayers = [...players].sort((a, b) => a.score - b.score);
 
@@ -16,6 +17,7 @@ export const GameStatsScreen: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {sortedPlayers.map((player, index) => {
                     const stats = calculateDetailedStats(player, startingScore);
+                    const x01Stats = calculateX01Stats(player);
                     const isWinner = player.score === 0;
 
                     return (
@@ -45,13 +47,13 @@ export const GameStatsScreen: React.FC = () => {
                                 <div className="font-bold text-right">{stats.lowest}</div>
 
                                 <div>100+ Throws:</div>
-                                <div className="font-bold text-right">{stats.tons}</div>
+                                <div className="font-bold text-right">{x01Stats.tons}</div>
 
                                 <div>140+ Throws:</div>
-                                <div className="font-bold text-right">{stats.ton40s}</div>
+                                <div className="font-bold text-right">{x01Stats.ton40s}</div>
 
                                 <div>180s:</div>
-                                <div className="font-bold text-right">{stats.ton80s}</div>
+                                <div className="font-bold text-right">{x01Stats.ton80s}</div>
 
                                 <div>Darts Thrown:</div>
                                 <div className="font-bold text-right">{stats.dartsThrown}</div>

@@ -25,12 +25,15 @@ export const CheckoutDisplay: React.FC<CheckoutDisplayProps> = ({ checkout }) =>
                         bgColor = "bg-red-500";
                         textColor = "text-white";
                     } else if (isDouble) {
-                        bgColor = "bg-green-500";
+                        bgColor = "bg-pink-500";
                         textColor = "text-white";
                     } else if (isBull) {
                         bgColor = "";
                         textColor = "text-white";
                         extraClasses = "bg-[linear-gradient(90deg,_#f87171,_#fb923c,_#facc15,_#4ade80,_#60a5fa,_#818cf8,_#8b5cf6)] bg-[length:800%_800%] animate-gradient border-2 border-white p-2 text-white font-bold text-center rounded-full";
+                    } else if (part === '25') {
+                        bgColor = "bg-green-500";
+                        textColor = "text-white";
                     }
 
                     return (

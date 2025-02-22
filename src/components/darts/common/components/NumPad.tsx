@@ -1,19 +1,28 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { useGameContext } from '@/components/darts/context/GameContext';
-import { quickScores } from '../utils/score-utils';
+import { Player } from '../types/player';
 
-export const NumPad: React.FC = () => {
-    const {
-        currentPlayerIndex,
-        players,
-        currentThrow,
-        setCurrentThrow,
-        handleThrow,
-        isProcessingInput,
-        setIsProcessingInput
-    } = useGameContext();
+interface NumPadProps {
+    currentPlayerIndex: number;
+    players: Player[];
+    currentThrow: string;
+    setCurrentThrow: React.Dispatch<React.SetStateAction<string>>;
+    handleThrow: (score: number | string) => void;
+    isProcessingInput: boolean;
+    setIsProcessingInput: React.Dispatch<React.SetStateAction<boolean>>;
+    quickScores?: number[];
+}
 
+export const NumPad: React.FC<NumPadProps> = ({
+                                                  currentPlayerIndex,
+                                                  players,
+                                                  currentThrow,
+                                                  setCurrentThrow,
+                                                  handleThrow,
+                                                  isProcessingInput,
+                                                  setIsProcessingInput,
+                                                  quickScores = [100, 60, 40, 26, 20, 10]
+                                              }) => {
     function getBackspaceButtonText() {
         const currentPlayer = players[currentPlayerIndex];
         const isPotentialBust = currentPlayer?.score <= 170 && currentThrow === '';
