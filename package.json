@@ -1,6 +1,6 @@
 {
-  "name": "darts-scorer-app",
-  "homepage": "https://br-watson.github.io/darts-scorer-app/",
+  "name": "darts-games",
+  "homepage": "https://br-watson.github.io/darts-games/",
   "version": "0.1.0",
   "private": true,
   "scripts": {
