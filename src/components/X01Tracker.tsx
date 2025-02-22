@@ -297,7 +297,8 @@ export const X01Tracker = () => {
             score: startingScore,
             throws: []
         })));
-        setCurrentPlayerIndex(0);
+        const randomIndex = Math.floor(Math.random() * players.length);
+        setCurrentPlayerIndex(randomIndex);
         setWinner(null);
         setCurrentThrow('');
         setHistory([]);
