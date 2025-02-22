@@ -30,7 +30,7 @@ export const CheckoutDisplay: React.FC<CheckoutDisplayProps> = ({ checkout }) =>
                     } else if (isBull) {
                         bgColor = "";
                         textColor = "text-white";
-                        extraClasses = "animate-pulse bg-gradient-to-r from-red-500 via-yellow-500 to-green-500 border-2 border-white";
+                        extraClasses = "bg-[linear-gradient(90deg,_#f87171,_#fb923c,_#facc15,_#4ade80,_#60a5fa,_#818cf8,_#8b5cf6)] bg-[length:800%_800%] animate-gradient border-2 border-white p-2 text-white font-bold text-center rounded-full";
                     }
 
                     return (
