@@ -10,6 +10,7 @@ interface Player {
     name: string;
     score: number;
     throws: number[];
+    checkoutDart?: 1 | 2 | 3;
 }
 
 interface HistoryState {
@@ -37,6 +38,11 @@ export const X01Tracker = () => {
         show: false,
         message: ''
     });
+    const [checkoutDartPrompt, setCheckoutDartPrompt] = useState<{
+        show: boolean,
+        playerIndex: number,
+        score: number
+    } | null>(null);
 
     const triggerCelebration = (message: string) => {
         setCelebration({ show: true, message });
@@ -346,7 +352,12 @@ export const X01Tracker = () => {
         }
 
         if (newScore === 0) {
-            setWinner(currentPlayer);
+            // setWinner(currentPlayer);
+            setCheckoutDartPrompt({
+                show: true,
+                playerIndex: currentPlayerIndex,
+                score: currentPlayer.score + throwScore // Original score before this throw
+            });
         } else {
             setCurrentPlayerIndex((currentPlayerIndex + 1) % players.length);
         }
@@ -399,7 +410,6 @@ export const X01Tracker = () => {
     };
 
     const GameStatsScreen = ({ players, startingScore, onNewGame }: {players: Player[], startingScore: number, onNewGame: () => void}) => {
-        // Calculate detailed stats for all players
         const calculateDetailedStats = (player: Player) => {
             if (!player.throws.length) return { average: 0, highest: 0, tons: 0, ton40s: 0, ton80s: 0 };
 
@@ -410,7 +420,12 @@ export const X01Tracker = () => {
             const tons = throws.filter(t => t >= 100 && t < 140).length;
             const ton40s = throws.filter(t => t >= 140 && t < 180).length;
             const ton80s = throws.filter(t => t === 180).length;
-            const dartsThrown = throws.length * 3;
+            let dartsThrown = (throws.length - 1) * 3;
+            if (player.score === 0 && player.checkoutDart) {
+                dartsThrown += player.checkoutDart;
+            } else {
+                dartsThrown += 3;
+            }
             const totalScore = startingScore - player.score;
             const pointsPerDart = totalScore / dartsThrown;
 
@@ -474,6 +489,17 @@ export const X01Tracker = () => {
 
                                     <div>Darts Thrown:</div>
                                     <div className="font-bold text-right">{stats.dartsThrown}</div>
+
+                                    {player.score === 0 && (
+                                        <>
+                                            <div>Checkout Dart:</div>
+                                            <div className="font-bold text-right">
+                                                {player.checkoutDart ?
+                                                    `${player.checkoutDart}${player.checkoutDart === 1 ? 'st' : player.checkoutDart === 2 ? 'nd' : 'rd'} dart` :
+                                                    'Unknown'}
+                                            </div>
+                                        </>
+                                    )}
                                 </div>
                             </div>
                         );
@@ -484,6 +510,31 @@ export const X01Tracker = () => {
                     <Button onClick={onNewGame} className="px-6">
                         Play Again
                     </Button>
+                </div>
+            </div>
+        );
+    };
+
+    const CheckoutDartPrompt = () => {
+        if (!checkoutDartPrompt) return null;
+
+        const handleDartSelection = (dartNumber: 1 | 2 | 3) => {
+            const updatedPlayers = [...players];
+            updatedPlayers[checkoutDartPrompt.playerIndex].checkoutDart = dartNumber;
+            setPlayers(updatedPlayers);
+            setWinner(updatedPlayers[checkoutDartPrompt.playerIndex]);
+            setCheckoutDartPrompt(null);
+        };
+
+        return (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <div className="bg-white p-4 rounded-lg shadow-lg max-w-sm w-full">
+                    <h3 className="font-bold text-lg mb-4">Which dart did you checkout with?</h3>
+                    <div className="grid grid-cols-3 gap-2 mb-4">
+                        <Button onClick={() => handleDartSelection(1)}>First Dart</Button>
+                        <Button onClick={() => handleDartSelection(2)}>Second Dart</Button>
+                        <Button onClick={() => handleDartSelection(3)}>Third Dart</Button>
+                    </div>
                 </div>
             </div>
         );
@@ -798,6 +849,7 @@ export const X01Tracker = () => {
                             </div>
                         )}
                     </CardContent>
+                    {checkoutDartPrompt && <CheckoutDartPrompt />}
                     {celebration.show && <CelebrationAnimation/>}
                 </Card>
             </>
