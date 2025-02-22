@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { Player, HistoryState } from '../../common/types/player';
 import { CelebrationState } from '../../common/types/ui-state';
 import { CheckoutDartPromptState, X01GameContextType } from '../types';
@@ -33,39 +33,14 @@ export const X01GameProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
     const validThreeDartScores = calculateValidThreeDartScores();
 
-    useEffect(() => {
-        const savedPlayers = localStorage.getItem('x01Players');
-        if (savedPlayers) {
-            setPlayers(JSON.parse(savedPlayers));
-        }
-    }, []);
-
-    useEffect(() => {
-        const handler = (e: KeyboardEvent) => {
-            if (isProcessingInput) return;
-            if (!gameStarted || winner) return;
-
-            if (e.key === 'Enter') {
-                handleThrow(parseInt(currentThrow));
-            } else if (e.key === 'Backspace') {
-                setCurrentThrow(prev => prev.slice(0, -1));
-            }
-        };
-
-        document.addEventListener('keydown', handler);
-        return () => {
-            document.removeEventListener('keydown', handler);
-        };
-    }, [currentThrow, gameStarted, winner, isProcessingInput]);
-
-    const triggerCelebration = (message: string) => {
+    const triggerCelebration = useCallback((message: string) => {
         setCelebration({ show: true, message });
         setTimeout(() => {
             setCelebration({ show: false, message: '' });
         }, 3000);
-    };
+    }, []);
 
-    const addPlayer = () => {
+    const addPlayer = useCallback(() => {
         if (newPlayerName.trim() && players.length < 9 && !gameStarted) {
             const updatedPlayers = [...players, {
                 name: newPlayerName.trim(),
@@ -76,24 +51,24 @@ export const X01GameProvider: React.FC<{ children: React.ReactNode }> = ({ child
             localStorage.setItem('x01Players', JSON.stringify(updatedPlayers));
             setNewPlayerName('');
         }
-    };
+    }, [newPlayerName, players, gameStarted, startingScore]);
 
-    const removePlayer = (index: number) => {
+    const removePlayer = useCallback((index: number) => {
         if (!gameStarted) {
             const updatedPlayers = players.filter((_, i) => i !== index);
             setPlayers(updatedPlayers);
             localStorage.setItem('x01Players', JSON.stringify(updatedPlayers));
         }
-    };
+    }, [gameStarted, players]);
 
-    const startGame = () => {
+    const startGame = useCallback(() => {
         if (players.length >= 1) {
             setGameStarted(true);
             setHistory([]);
         }
-    };
+    }, [players.length]);
 
-    const resetGame = () => {
+    const resetGame = useCallback(() => {
         const resetPlayers = players.map(player => ({
             ...player,
             score: startingScore,
@@ -107,9 +82,9 @@ export const X01GameProvider: React.FC<{ children: React.ReactNode }> = ({ child
         setWinner(null);
         setCurrentThrow('');
         setHistory([]);
-    };
+    }, [players, startingScore]);
 
-    const handleThrow = (score: number | string) => {
+    const handleThrow = useCallback((score: number | string) => {
         const throwScore = typeof score === 'number' ? score : parseInt(currentThrow);
         if (!validThreeDartScores.has(throwScore)) {
             return;
@@ -119,7 +94,6 @@ export const X01GameProvider: React.FC<{ children: React.ReactNode }> = ({ child
         const currentPlayer = updatedPlayers[currentPlayerIndex];
         const newScore = currentPlayer.score - throwScore;
 
-        // Check for invalid scores - can't go to 1 or negative
         if (newScore < 0 || newScore === 1) {
             setCurrentThrow('');
             return;
@@ -141,7 +115,7 @@ export const X01GameProvider: React.FC<{ children: React.ReactNode }> = ({ child
             setCheckoutDartPrompt({
                 show: true,
                 playerIndex: currentPlayerIndex,
-                score: currentPlayer.score + throwScore // Original score before this throw
+                score: currentPlayer.score + throwScore
             });
         } else {
             setCurrentPlayerIndex((currentPlayerIndex + 1) % players.length);
@@ -149,9 +123,9 @@ export const X01GameProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
         setPlayers(updatedPlayers);
         setCurrentThrow('');
-    };
+    }, [currentThrow, players, currentPlayerIndex, validThreeDartScores, history, triggerCelebration]);
 
-    const handleUndo = () => {
+    const handleUndo = useCallback(() => {
         if (history.length > 0) {
             const lastState = history[history.length - 1];
             setPlayers(lastState.players);
@@ -159,7 +133,33 @@ export const X01GameProvider: React.FC<{ children: React.ReactNode }> = ({ child
             setHistory(history.slice(0, -1));
             setWinner(null);
         }
-    };
+    }, [history]);
+
+    useEffect(() => {
+        const savedPlayers = localStorage.getItem('x01Players');
+        if (savedPlayers) {
+            setPlayers(JSON.parse(savedPlayers));
+        }
+    }, []);
+
+    // Add keyboard event listener
+    useEffect(() => {
+        const handler = (e: KeyboardEvent) => {
+            if (isProcessingInput) return;
+            if (!gameStarted || winner) return;
+
+            if (e.key === 'Enter') {
+                handleThrow(parseInt(currentThrow));
+            } else if (e.key === 'Backspace') {
+                setCurrentThrow(prev => prev.slice(0, -1));
+            }
+        };
+
+        document.addEventListener('keydown', handler);
+        return () => {
+            document.removeEventListener('keydown', handler);
+        };
+    }, [currentThrow, gameStarted, winner, isProcessingInput, handleThrow]);
 
     const contextValue: X01GameContextType = {
         // State
