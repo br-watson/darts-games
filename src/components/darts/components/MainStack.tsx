@@ -3,7 +3,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Plus, X, RotateCcw, Trophy } from 'lucide-react';
-import { useGameContext } from '../context/GameContext';
+import { useGameContext } from '@/components/darts/context/GameContext';
 import { NumPad } from './NumPad';
 import { CurrentPlayerCard } from './CurrentPlayerCard';
 import { OtherPlayersGrid } from './OtherPlayersGrid';

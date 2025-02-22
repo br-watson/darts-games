@@ -1,6 +1,6 @@
 'use client'
 
-import { X01Tracker } from '@/components/X01Tracker'
+import { X01Tracker } from '@/components/darts/X01Tracker'
 
 export default function Home() {
   return (

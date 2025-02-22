@@ -1,4 +1,4 @@
-import { Player } from './types';
+import { Player } from '../types';
 
 export function isValidThreeDartScore(score: number): boolean {
     if (score > 180) return false;

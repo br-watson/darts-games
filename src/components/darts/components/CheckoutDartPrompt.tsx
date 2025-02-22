@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { useGameContext } from '../context/GameContext';
+import { useGameContext } from '@/components/darts/context/GameContext';
 
 export const CheckoutDartPrompt: React.FC = () => {
     const { checkoutDartPrompt, players, setPlayers, setWinner, setCheckoutDartPrompt } = useGameContext();

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { useGameContext } from '../context/GameContext';
-import { quickScores } from '../score-utils';
+import { useGameContext } from '@/components/darts/context/GameContext';
+import { quickScores } from '../utils/score-utils';
 
 export const NumPad: React.FC = () => {
     const {

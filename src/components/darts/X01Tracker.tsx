@@ -1,10 +1,10 @@
 'use client'
 
 import React from 'react';
-import { GameProvider } from './context/GameContext';
-import { GameStatsScreen } from './darts/GameStatsScreen';
-import { MainStack } from './darts/MainStack';
-import { useGameContext } from './context/GameContext';
+import { GameProvider } from '@/components/darts/context/GameContext';
+import { GameStatsScreen } from './components/GameStatsScreen';
+import { MainStack } from './components/MainStack';
+import { useGameContext } from '@/components/darts/context/GameContext';
 
 const GameContent: React.FC = () => {
     const { winner } = useGameContext();

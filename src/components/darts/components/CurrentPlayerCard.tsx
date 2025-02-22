@@ -1,7 +1,7 @@
 import React from 'react';
-import { useGameContext } from '../context/GameContext';
-import { calculateStats } from '../score-utils';
-import { getCheckoutSuggestion } from '../checkout-suggestions';
+import { useGameContext } from '@/components/darts/context/GameContext';
+import { calculateStats } from '../utils/score-utils';
+import { getCheckoutSuggestion } from '../utils/checkout-suggestions';
 import { CheckoutDisplay } from './CheckoutDisplay';
 
 export const CurrentPlayerCard: React.FC = () => {

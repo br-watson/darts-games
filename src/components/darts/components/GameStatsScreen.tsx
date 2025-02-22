@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Trophy } from 'lucide-react';
-import { calculateDetailedStats } from '../score-utils';
-import { useGameContext } from '../context/GameContext';
+import { calculateDetailedStats } from '../utils/score-utils';
+import { useGameContext } from '@/components/darts/context/GameContext';
 
 export const GameStatsScreen: React.FC = () => {
     const { players, startingScore, resetGame } = useGameContext();

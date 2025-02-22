@@ -1,5 +1,5 @@
 import React from 'react';
-import { useGameContext } from '../context/GameContext';
+import { useGameContext } from '@/components/darts/context/GameContext';
 
 export const CelebrationAnimation: React.FC = () => {
     const { celebration } = useGameContext();

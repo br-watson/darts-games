@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Player, HistoryState, CelebrationState, CheckoutDartPromptState, GameContextType } from '../types';
-import { calculateValidThreeDartScores } from '../score-utils';
+import { calculateValidThreeDartScores } from '../utils/score-utils';
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
 
