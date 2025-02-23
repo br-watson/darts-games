@@ -60,17 +60,18 @@ export const X01Board: React.FC = () => {
                             <span>Starting Score</span>
                         </div>
 
-                        <div className="flex items-center gap-2">
+                        <div className="flex flex-col sm:flex-row gap-2">
                             <Input
                                 value={newPlayerName}
                                 onChange={(e) => setNewPlayerName(e.target.value)}
                                 placeholder="Player name"
                                 onKeyUp={(e) => e.key === 'Enter' && addPlayer()}
-                                className="w-48"
+                                className="flex-1 min-w-0"
                             />
                             <Button
                                 onClick={addPlayer}
                                 disabled={players.length >= 9}
+                                className="w-full sm:w-auto whitespace-nowrap"
                             >
                                 <Plus className="w-4 h-4 mr-2"/>
                                 Add Player
