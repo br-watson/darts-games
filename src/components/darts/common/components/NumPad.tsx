@@ -48,7 +48,7 @@ export const NumPad: React.FC<NumPadProps> = ({
                         return (
                             <Button
                                 key={`${i}-${j}`}
-                                className={`h-16 text-2xl ${isBustButton ? 'bg-red-500 hover:bg-red-600' : ''}`}
+                                className={`h-16 text-2xl lg:h-20 lg:text-3xl ${isBustButton ? 'bg-red-500 hover:bg-red-600' : ''}`}
                                 variant={
                                     btn === 'Enter' || isBustButton
                                         ? 'default'
@@ -90,7 +90,7 @@ export const NumPad: React.FC<NumPadProps> = ({
                     <Button
                         key={score}
                         variant="outline"
-                        className="h-12 font-bold"
+                        className="h-12 text-2xl lg:h-20 lg:text-3xl"
                         onClick={() => {
                             if (isProcessingInput) return;
                             setIsProcessingInput(true);
