@@ -113,9 +113,9 @@ export const PlayerProfileManagement: React.FC = () => {
                             <Button
                                 onClick={handleAddProfile}
                                 disabled={!newProfileName.trim()}
+                                className="flex items-center"
                             >
-                                <UserPlus className="w-4 h-4 mr-2" />
-                                Add Player
+                                <UserPlus className="w-4 h-4" />
                             </Button>
                         </div>
                         {error && (
