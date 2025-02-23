@@ -5,7 +5,7 @@ export const OtherPlayersGrid: React.FC = () => {
     const { players, currentPlayerIndex } = useX01GameContext();
 
     return (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 mb-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 mb-4">
             {players.map((player, index) => {
                 if (index === currentPlayerIndex) return null;
 

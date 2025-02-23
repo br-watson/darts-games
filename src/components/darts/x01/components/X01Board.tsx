@@ -43,7 +43,7 @@ export const X01Board: React.FC = () => {
     const { profiles } = usePlayerProfiles();
 
     return (
-        <Card className="w-full max-w-full sm:max-w-2xl mx-auto">
+        <Card className="w-full max-w-full sm:max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
             <CardHeader className="relative">
                 <CardTitle className="text-xl font-extrabold">
                     X01 Darts Tracker
