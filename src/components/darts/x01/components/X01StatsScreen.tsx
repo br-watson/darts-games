@@ -125,7 +125,7 @@ export const X01StatsScreen: React.FC = () => {
                                             %
                                         </div>
 
-                                        <div>Career 3-Dart Avg:</div>
+                                        <div>3-Dart Avg:</div>
                                         <div className="text-right">
                                             {playerProfile.stats.averageThrow.toFixed(
                                                 2,
@@ -147,6 +147,11 @@ export const X01StatsScreen: React.FC = () => {
                                         <div>Total 180s:</div>
                                         <div className="text-right">
                                             {playerProfile.stats.ton80s}
+                                        </div>
+
+                                        <div>Darts thrown:</div>
+                                        <div className="text-right">
+                                            {playerProfile.stats.totalThrows}
                                         </div>
                                     </div>
                                 </div>
