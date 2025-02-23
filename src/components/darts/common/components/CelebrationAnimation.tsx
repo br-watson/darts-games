@@ -5,7 +5,9 @@ interface CelebrationAnimationProps {
     celebration: CelebrationState;
 }
 
-export const CelebrationAnimation: React.FC<CelebrationAnimationProps> = ({ celebration }) => {
+export const CelebrationAnimation: React.FC<CelebrationAnimationProps> = ({
+    celebration,
+}) => {
     if (!celebration.show) return null;
 
     return (

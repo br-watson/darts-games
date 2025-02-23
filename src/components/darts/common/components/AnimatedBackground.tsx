@@ -39,8 +39,12 @@ class Particle implements ParticleProps {
         this.x += this.speedX;
         this.y += this.speedY;
 
-        if (this.x < 0 || this.x > this.canvas.width ||
-            this.y < 0 || this.y > this.canvas.height) {
+        if (
+            this.x < 0 ||
+            this.x > this.canvas.width ||
+            this.y < 0 ||
+            this.y > this.canvas.height
+        ) {
             this.reset();
         }
     }
@@ -48,10 +52,17 @@ class Particle implements ParticleProps {
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.beginPath();
         const gradient = ctx.createRadialGradient(
-            this.x, this.y, 0,
-            this.x, this.y, this.size * 2
+            this.x,
+            this.y,
+            0,
+            this.x,
+            this.y,
+            this.size * 2,
         );
-        gradient.addColorStop(0, `hsla(${this.hue}, 100%, 70%, ${this.opacity})`);
+        gradient.addColorStop(
+            0,
+            `hsla(${this.hue}, 100%, 70%, ${this.opacity})`,
+        );
         gradient.addColorStop(1, `hsla(${this.hue}, 100%, 70%, 0)`);
         ctx.fillStyle = gradient;
         ctx.arc(this.x, this.y, this.size * 2, 0, Math.PI * 2);
@@ -82,7 +93,9 @@ const AnimatedBackground: React.FC = () => {
         const initParticles = (): void => {
             if (!canvas) return;
             particles = [];
-            const particleCount = Math.floor((canvas.width * canvas.height) / 10000);
+            const particleCount = Math.floor(
+                (canvas.width * canvas.height) / 10000,
+            );
             for (let i = 0; i < particleCount; i++) {
                 particles.push(new Particle(canvas));
             }
@@ -93,7 +106,7 @@ const AnimatedBackground: React.FC = () => {
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            particles.forEach(particle => {
+            particles.forEach((particle) => {
                 particle.update();
                 particle.draw(ctx);
             });
@@ -117,18 +130,25 @@ const AnimatedBackground: React.FC = () => {
     }, []);
 
     return (
-        <div className="fixed inset-0" style={{
-            background: 'linear-gradient(to bottom right, var(--from-color) 10%, black 30%, black 70%, var(--to-color) 90%)',
-            zIndex: -1
-        }}>
+        <div
+            className="fixed inset-0"
+            style={{
+                background:
+                    'linear-gradient(to bottom right, var(--from-color) 10%, black 30%, black 70%, var(--to-color) 90%)',
+                zIndex: -1,
+            }}
+        >
             <div
                 ref={bgRef}
                 className="absolute inset-0"
-                style={{
-                    '--from-color': '#312e81',
-                    '--to-color': '#1e3a8a',
-                    background: 'linear-gradient(to bottom right, var(--from-color) 0%, black 30%, black 70%, var(--to-color) 100%)'
-                } as React.CSSProperties}
+                style={
+                    {
+                        '--from-color': '#312e81',
+                        '--to-color': '#1e3a8a',
+                        background:
+                            'linear-gradient(to bottom right, var(--from-color) 0%, black 30%, black 70%, var(--to-color) 100%)',
+                    } as React.CSSProperties
+                }
             />
             <canvas
                 ref={canvasRef}

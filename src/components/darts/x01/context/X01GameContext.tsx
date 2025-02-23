@@ -1,7 +1,13 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, {
+    createContext,
+    useContext,
+    useState,
+    useEffect,
+    useCallback,
+} from 'react';
 import { Player, HistoryState } from '../../common/types/player';
 import { CelebrationState } from '../../common/types/ui-state';
-import { CheckoutDartPromptState, X01GameContextType } from '../types';
+import { CheckoutDartPromptState, X01GameContextType } from '../types/types';
 import { calculateValidThreeDartScores } from '../../common/utils/score-utils';
 
 const X01GameContext = createContext<X01GameContextType | undefined>(undefined);
@@ -9,12 +15,16 @@ const X01GameContext = createContext<X01GameContextType | undefined>(undefined);
 export const useX01GameContext = () => {
     const context = useContext(X01GameContext);
     if (!context) {
-        throw new Error('useX01GameContext must be used within an X01GameProvider');
+        throw new Error(
+            'useX01GameContext must be used within an X01GameProvider',
+        );
     }
     return context;
 };
 
-export const X01GameProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const X01GameProvider: React.FC<{ children: React.ReactNode }> = ({
+    children,
+}) => {
     const [gameStarted, setGameStarted] = useState(false);
     const [startingScore, setStartingScore] = useState<number>(501);
     const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
@@ -27,9 +37,16 @@ export const X01GameProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const [showResetConfirm, setShowResetConfirm] = useState(false);
     const [celebration, setCelebration] = useState<CelebrationState>({
         show: false,
-        message: ''
+        message: '',
     });
-    const [checkoutDartPrompt, setCheckoutDartPrompt] = useState<CheckoutDartPromptState | null>(null);
+    const [checkoutDartPrompt, setCheckoutDartPrompt] =
+        useState<CheckoutDartPromptState | null>(null);
+    const [showClearDataConfirm, setShowClearDataConfirm] = useState(false);
+
+    const clearGameData = useCallback(() => {
+        localStorage.clear();
+        window.location.reload();
+    }, []);
 
     const validThreeDartScores = calculateValidThreeDartScores();
 
@@ -40,26 +57,42 @@ export const X01GameProvider: React.FC<{ children: React.ReactNode }> = ({ child
         }, 3000);
     }, []);
 
-    const addPlayer = useCallback(() => {
-        if (newPlayerName.trim() && players.length < 9 && !gameStarted) {
-            const updatedPlayers = [...players, {
-                name: newPlayerName.trim(),
-                score: startingScore,
-                throws: []
-            }];
-            setPlayers(updatedPlayers);
-            localStorage.setItem('x01Players', JSON.stringify(updatedPlayers));
-            setNewPlayerName('');
-        }
-    }, [newPlayerName, players, gameStarted, startingScore]);
+    const addPlayer = useCallback(
+        (name?: string) => {
+            const playerName = name?.trim() || newPlayerName.trim();
+            if (playerName && players.length < 9 && !gameStarted) {
+                const updatedPlayers = [
+                    ...players,
+                    {
+                        name: playerName,
+                        score: startingScore,
+                        throws: [],
+                    },
+                ];
+                setPlayers(updatedPlayers);
+                localStorage.setItem(
+                    'x01Players',
+                    JSON.stringify(updatedPlayers),
+                );
+                setNewPlayerName('');
+            }
+        },
+        [newPlayerName, players, gameStarted, startingScore],
+    );
 
-    const removePlayer = useCallback((index: number) => {
-        if (!gameStarted) {
-            const updatedPlayers = players.filter((_, i) => i !== index);
-            setPlayers(updatedPlayers);
-            localStorage.setItem('x01Players', JSON.stringify(updatedPlayers));
-        }
-    }, [gameStarted, players]);
+    const removePlayer = useCallback(
+        (index: number) => {
+            if (!gameStarted) {
+                const updatedPlayers = players.filter((_, i) => i !== index);
+                setPlayers(updatedPlayers);
+                localStorage.setItem(
+                    'x01Players',
+                    JSON.stringify(updatedPlayers),
+                );
+            }
+        },
+        [gameStarted, players],
+    );
 
     const startGame = useCallback(() => {
         if (players.length >= 1) {
@@ -69,10 +102,10 @@ export const X01GameProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }, [players.length]);
 
     const resetGame = useCallback(() => {
-        const resetPlayers = players.map(player => ({
+        const resetPlayers = players.map((player) => ({
             ...player,
             score: startingScore,
-            throws: []
+            throws: [],
         }));
         setGameStarted(false);
         setPlayers(resetPlayers);
@@ -84,46 +117,62 @@ export const X01GameProvider: React.FC<{ children: React.ReactNode }> = ({ child
         setHistory([]);
     }, [players, startingScore]);
 
-    const handleThrow = useCallback((score: number | string) => {
-        const throwScore = typeof score === 'number' ? score : parseInt(currentThrow);
-        if (!validThreeDartScores.has(throwScore)) {
-            return;
-        }
+    const handleThrow = useCallback(
+        (score: number | string) => {
+            const throwScore =
+                typeof score === 'number' ? score : parseInt(currentThrow);
+            if (!validThreeDartScores.has(throwScore)) {
+                return;
+            }
 
-        const updatedPlayers = [...players];
-        const currentPlayer = updatedPlayers[currentPlayerIndex];
-        const newScore = currentPlayer.score - throwScore;
+            const updatedPlayers = [...players];
+            const currentPlayer = updatedPlayers[currentPlayerIndex];
+            const newScore = currentPlayer.score - throwScore;
 
-        if (newScore < 0 || newScore === 1) {
+            if (newScore < 0 || newScore === 1) {
+                setCurrentThrow('');
+                return;
+            }
+
+            setHistory([
+                ...history,
+                {
+                    players: JSON.parse(JSON.stringify(players)),
+                    currentPlayerIndex,
+                },
+            ]);
+
+            currentPlayer.throws.push(throwScore);
+            currentPlayer.score = newScore;
+
+            if (throwScore === 26) {
+                triggerCelebration(`${currentPlayer.name} hit a perfect 26!`);
+            }
+
+            if (newScore === 0) {
+                setCheckoutDartPrompt({
+                    show: true,
+                    playerIndex: currentPlayerIndex,
+                    score: currentPlayer.score + throwScore,
+                });
+            } else {
+                setCurrentPlayerIndex(
+                    (currentPlayerIndex + 1) % players.length,
+                );
+            }
+
+            setPlayers(updatedPlayers);
             setCurrentThrow('');
-            return;
-        }
-
-        setHistory([...history, {
-            players: JSON.parse(JSON.stringify(players)),
-            currentPlayerIndex
-        }]);
-
-        currentPlayer.throws.push(throwScore);
-        currentPlayer.score = newScore;
-
-        if (throwScore === 26) {
-            triggerCelebration(`${currentPlayer.name} hit a perfect 26!`);
-        }
-
-        if (newScore === 0) {
-            setCheckoutDartPrompt({
-                show: true,
-                playerIndex: currentPlayerIndex,
-                score: currentPlayer.score + throwScore
-            });
-        } else {
-            setCurrentPlayerIndex((currentPlayerIndex + 1) % players.length);
-        }
-
-        setPlayers(updatedPlayers);
-        setCurrentThrow('');
-    }, [currentThrow, players, currentPlayerIndex, validThreeDartScores, history, triggerCelebration]);
+        },
+        [
+            currentThrow,
+            players,
+            currentPlayerIndex,
+            validThreeDartScores,
+            history,
+            triggerCelebration,
+        ],
+    );
 
     const handleUndo = useCallback(() => {
         if (history.length > 0) {
@@ -142,7 +191,6 @@ export const X01GameProvider: React.FC<{ children: React.ReactNode }> = ({ child
         }
     }, []);
 
-    // Add keyboard event listener
     useEffect(() => {
         const handler = (e: KeyboardEvent) => {
             if (isProcessingInput) return;
@@ -151,7 +199,7 @@ export const X01GameProvider: React.FC<{ children: React.ReactNode }> = ({ child
             if (e.key === 'Enter') {
                 handleThrow(parseInt(currentThrow));
             } else if (e.key === 'Backspace') {
-                setCurrentThrow(prev => prev.slice(0, -1));
+                setCurrentThrow((prev) => prev.slice(0, -1));
             }
         };
 
@@ -176,6 +224,7 @@ export const X01GameProvider: React.FC<{ children: React.ReactNode }> = ({ child
         celebration,
         checkoutDartPrompt,
         validThreeDartScores,
+        showClearDataConfirm,
 
         // State setters
         setGameStarted,
@@ -187,6 +236,7 @@ export const X01GameProvider: React.FC<{ children: React.ReactNode }> = ({ child
         setPlayers,
         setIsProcessingInput,
         setCheckoutDartPrompt,
+        setShowClearDataConfirm,
 
         // Actions
         triggerCelebration,
@@ -195,7 +245,8 @@ export const X01GameProvider: React.FC<{ children: React.ReactNode }> = ({ child
         startGame,
         resetGame,
         handleThrow,
-        handleUndo
+        handleUndo,
+        clearGameData,
     };
 
     return (

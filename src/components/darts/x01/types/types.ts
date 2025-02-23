@@ -1,6 +1,6 @@
 import React from 'react';
-import { Player, HistoryState } from '../common/types/player';
-import { CelebrationState } from '../common/types/ui-state';
+import { Player, HistoryState } from '../../common/types/player';
+import { CelebrationState } from '../../common/types/ui-state';
 
 export interface CheckoutDartPromptState {
     show: boolean;
@@ -23,6 +23,7 @@ export interface X01GameContextType {
     celebration: CelebrationState;
     checkoutDartPrompt: CheckoutDartPromptState | null;
     validThreeDartScores: Set<number>;
+    showClearDataConfirm: boolean;
 
     // State setters
     setGameStarted: React.Dispatch<React.SetStateAction<boolean>>;
@@ -33,16 +34,20 @@ export interface X01GameContextType {
     setWinner: React.Dispatch<React.SetStateAction<Player | null>>;
     setPlayers: React.Dispatch<React.SetStateAction<Player[]>>;
     setIsProcessingInput: React.Dispatch<React.SetStateAction<boolean>>;
-    setCheckoutDartPrompt: React.Dispatch<React.SetStateAction<CheckoutDartPromptState | null>>;
+    setCheckoutDartPrompt: React.Dispatch<
+        React.SetStateAction<CheckoutDartPromptState | null>
+    >;
+    setShowClearDataConfirm: React.Dispatch<React.SetStateAction<boolean>>;
 
     // Actions
     triggerCelebration: (message: string) => void;
-    addPlayer: () => void;
+    addPlayer: (name?: string) => void;
     removePlayer: (index: number) => void;
     startGame: () => void;
     resetGame: () => void;
     handleThrow: (score: number | string) => void;
     handleUndo: () => void;
+    clearGameData: () => void;
 }
 
 export interface X01Stats {

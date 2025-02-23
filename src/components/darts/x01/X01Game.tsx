@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React from 'react';
 import { X01GameProvider, useX01GameContext } from './context/X01GameContext';

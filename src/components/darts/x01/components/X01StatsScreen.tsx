@@ -4,9 +4,11 @@ import { Trophy } from 'lucide-react';
 import { calculateDetailedStats } from '../../common/utils/score-utils';
 import { useX01GameContext } from '../context/X01GameContext';
 import { calculateX01Stats } from '@/components/darts/x01/utils/checkout-suggestions';
+import { usePlayerProfiles } from '../context/PlayerProfileContext';
 
 export const X01StatsScreen: React.FC = () => {
     const { players, startingScore, resetGame } = useX01GameContext();
+    const { profiles } = usePlayerProfiles();
 
     const sortedPlayers = [...players].sort((a, b) => a.score - b.score);
 
@@ -20,55 +22,135 @@ export const X01StatsScreen: React.FC = () => {
                     const x01Stats = calculateX01Stats(player);
                     const isWinner = player.score === 0;
 
+                    const playerProfile = profiles.find(
+                        (p) => p.name === player.name,
+                    );
+
                     return (
                         <div
                             key={index}
                             className={`p-4 rounded-lg shadow ${isWinner ? 'bg-gradient-to-r from-yellow-50 to-amber-50 border-2 border-yellow-300' : 'bg-gray-50'}`}
                         >
                             <div className="flex justify-between items-center mb-3">
-                                <h3 className="text-xl font-bold">{player.name}</h3>
-                                {isWinner && <Trophy className="w-6 h-6 text-yellow-500" />}
+                                <h3 className="text-xl font-bold">
+                                    {player.name}
+                                </h3>
+                                {isWinner && (
+                                    <Trophy className="w-6 h-6 text-yellow-500" />
+                                )}
                             </div>
 
                             <div className="grid grid-cols-2 gap-y-2">
                                 <div>Score Left:</div>
-                                <div className="font-bold text-right">{player.score}</div>
+                                <div className="font-bold text-right">
+                                    {player.score}
+                                </div>
 
                                 <div>Avg Per Dart:</div>
-                                <div className="font-bold text-right">{stats.pointsPerDart}</div>
+                                <div className="font-bold text-right">
+                                    {stats.pointsPerDart}
+                                </div>
 
                                 <div>Avg Per Throw:</div>
-                                <div className="font-bold text-right">{stats.average}</div>
+                                <div className="font-bold text-right">
+                                    {stats.average}
+                                </div>
 
                                 <div>Best 3 Darts:</div>
-                                <div className="font-bold text-right">{stats.highest}</div>
+                                <div className="font-bold text-right">
+                                    {stats.highest}
+                                </div>
 
                                 <div>Worst 3 Darts:</div>
-                                <div className="font-bold text-right">{stats.lowest}</div>
+                                <div className="font-bold text-right">
+                                    {stats.lowest}
+                                </div>
 
                                 <div>100+ Throws:</div>
-                                <div className="font-bold text-right">{x01Stats.tons}</div>
+                                <div className="font-bold text-right">
+                                    {x01Stats.tons}
+                                </div>
 
                                 <div>140+ Throws:</div>
-                                <div className="font-bold text-right">{x01Stats.ton40s}</div>
+                                <div className="font-bold text-right">
+                                    {x01Stats.ton40s}
+                                </div>
 
                                 <div>180s:</div>
-                                <div className="font-bold text-right">{x01Stats.ton80s}</div>
+                                <div className="font-bold text-right">
+                                    {x01Stats.ton80s}
+                                </div>
 
                                 <div>Darts Thrown:</div>
-                                <div className="font-bold text-right">{stats.dartsThrown}</div>
+                                <div className="font-bold text-right">
+                                    {stats.dartsThrown}
+                                </div>
 
                                 {player.score === 0 && (
                                     <>
                                         <div>Checkout Dart:</div>
                                         <div className="font-bold text-right">
-                                            {player.checkoutDart ?
-                                                `${player.checkoutDart}${player.checkoutDart === 1 ? 'st' : player.checkoutDart === 2 ? 'nd' : 'rd'} dart` :
-                                                'Unknown'}
+                                            {player.checkoutDart
+                                                ? `${player.checkoutDart}${player.checkoutDart === 1 ? 'st' : player.checkoutDart === 2 ? 'nd' : 'rd'} dart`
+                                                : 'Unknown'}
                                         </div>
                                     </>
                                 )}
                             </div>
+
+                            {playerProfile && (
+                                <div className="mt-4 pt-4 border-t">
+                                    <h4 className="font-semibold mb-2">
+                                        Career Stats
+                                    </h4>
+                                    <div className="grid grid-cols-2 gap-y-2 text-sm">
+                                        <div>Games Played:</div>
+                                        <div className="text-right">
+                                            {playerProfile.stats.gamesPlayed}
+                                        </div>
+
+                                        <div>Games Won:</div>
+                                        <div className="text-right">
+                                            {playerProfile.stats.gamesWon}
+                                        </div>
+
+                                        <div>Win Rate:</div>
+                                        <div className="text-right">
+                                            {(
+                                                (playerProfile.stats.gamesWon /
+                                                    playerProfile.stats
+                                                        .gamesPlayed) *
+                                                100
+                                            ).toFixed(1)}
+                                            %
+                                        </div>
+
+                                        <div>Career 3-Dart Avg:</div>
+                                        <div className="text-right">
+                                            {playerProfile.stats.averageThrow.toFixed(
+                                                2,
+                                            )}
+                                        </div>
+
+                                        <div>Per Dart Avg:</div>
+                                        <div className="text-right">
+                                            {playerProfile.stats.averagePerDart.toFixed(
+                                                2,
+                                            )}
+                                        </div>
+
+                                        <div>Highest Throw:</div>
+                                        <div className="text-right">
+                                            {playerProfile.stats.highestThrow}
+                                        </div>
+
+                                        <div>Total 180s:</div>
+                                        <div className="text-right">
+                                            {playerProfile.stats.ton80s}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     );
                 })}

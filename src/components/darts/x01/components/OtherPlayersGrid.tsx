@@ -12,12 +12,18 @@ export const OtherPlayersGrid: React.FC = () => {
                 return (
                     <div key={index} className="p-2 bg-gray-100 rounded border">
                         <div className="flex justify-between">
-                            <span className="font-medium truncate">{player.name}</span>
+                            <span className="font-medium truncate">
+                                {player.name}
+                            </span>
                             <span className="font-bold">{player.score}</span>
                         </div>
                         <div className="text-sm text-gray-600 flex justify-between">
-                            <span>Last: {player.throws.slice(-1)[0] || '-'}</span>
-                            <span className="text-xs text-gray-400">{index + 1}</span>
+                            <span>
+                                Last: {player.throws.slice(-1)[0] || '-'}
+                            </span>
+                            <span className="text-xs text-gray-400">
+                                {index + 1}
+                            </span>
                         </div>
                     </div>
                 );
