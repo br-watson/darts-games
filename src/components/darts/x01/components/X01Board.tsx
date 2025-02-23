@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { RotateCcw, Trophy } from 'lucide-react';
+import { RotateCcw, Trophy, Trash2 } from 'lucide-react';
 import { useX01GameContext } from '../context/X01GameContext';
 import { NumPad } from '../../common/components/NumPad';
 import { CurrentPlayerCard } from './CurrentPlayerCard';
@@ -45,17 +45,19 @@ export const X01Board: React.FC = () => {
     return (
         <Card className="w-full max-w-full sm:max-w-2xl mx-auto">
             <CardHeader className="relative">
-                <CardTitle className="text-xl font-extrabold text-center">
+                <CardTitle className="text-xl font-extrabold">
                     X01 Darts Tracker
                 </CardTitle>
-                <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setShowClearDataConfirm(true)}
-                    className="text-red-500 hover:text-red-700 absolute right-6 top-6"
-                >
-                    Clear Game Data
-                </Button>
+                {!gameStarted &&
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setShowClearDataConfirm(true)}
+                        className="text-red-500 hover:text-red-700 absolute right-6 top-3"
+                    >
+                        <Trash2 className="w-4 h-4" />
+                    </Button>
+                }
             </CardHeader>
             <CardContent>
                 {!gameStarted ? (
@@ -172,14 +174,6 @@ export const X01Board: React.FC = () => {
                             })}
                         </div>
 
-                        {/* Add player profile management */}
-                        <div className="mt-12">
-                            <h3 className="text-lg font-semibold mb-6">
-                                Manage Players
-                            </h3>
-                            <PlayerProfileManagement />
-                        </div>
-
                         <Button
                             onClick={startGame}
                             disabled={players.length < 1 || startingScore < 2}
@@ -187,6 +181,11 @@ export const X01Board: React.FC = () => {
                         >
                             Start Game
                         </Button>
+
+                        {/* Add player profile management */}
+                        <div className="mt-12">
+                            <PlayerProfileManagement />
+                        </div>
                     </div>
                 ) : (
                     <div className="space-y-4">
