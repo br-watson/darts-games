@@ -1,4 +1,5 @@
 import { Player } from '../types/player';
+import { GeneralStats } from '@/components/darts/common/types/stats';
 
 export function isValidThreeDartScore(score: number): boolean {
     if (score > 180) return false;
@@ -33,7 +34,7 @@ export const calculateBasicStats = (player: Player) => {
 export const calculateDetailedStats = (
     player: Player,
     startingScore: number,
-) => {
+): GeneralStats => {
     if (!player.throws.length)
         return {
             averageThrow: 0,

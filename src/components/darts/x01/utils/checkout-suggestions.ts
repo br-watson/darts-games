@@ -1,4 +1,5 @@
 import { Player } from '@/components/darts/common/types/player';
+import { X01SpecificStats } from '@/components/darts/x01/types/types';
 
 export const checkouts: Readonly<Record<number, string>> = {
     170: 'T20 T20 Bull',
@@ -171,7 +172,7 @@ export const getCheckoutSuggestion = (score: number): string => {
 
 export const quickScores = [100, 60, 41, 26, 22, 11];
 
-export const calculateX01Stats = (player: Player) => {
+export const calculateX01Stats = (player: Player): X01SpecificStats => {
     if (!player.throws.length)
         return { tons: 0, ton40s: 0, ton80s: 0 };
 

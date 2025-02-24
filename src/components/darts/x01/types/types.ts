@@ -49,3 +49,9 @@ export interface X01GameContextType {
     handleUndo: () => void;
     clearGameData: () => void;
 }
+
+export interface X01SpecificStats {
+    tons: number;
+    ton40s: number;
+    ton80s: number;
+}
