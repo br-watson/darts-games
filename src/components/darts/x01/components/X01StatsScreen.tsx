@@ -48,22 +48,22 @@ export const X01StatsScreen: React.FC = () => {
 
                                 <div>Avg Per Dart:</div>
                                 <div className="font-bold text-right">
-                                    {stats.pointsPerDart}
+                                    {stats.averagePerDart.toFixed(2)}
                                 </div>
 
-                                <div>Avg Per Throw:</div>
+                                <div>3-Dart Average:</div>
                                 <div className="font-bold text-right">
-                                    {stats.average}
+                                    {stats.averageThrow.toFixed(2)}
                                 </div>
 
                                 <div>Best 3 Darts:</div>
                                 <div className="font-bold text-right">
-                                    {stats.highest}
+                                    {stats.highestThrow}
                                 </div>
 
                                 <div>Worst 3 Darts:</div>
                                 <div className="font-bold text-right">
-                                    {stats.lowest}
+                                    {stats.lowestThrow}
                                 </div>
 
                                 <div>100+ Throws:</div>
@@ -83,7 +83,7 @@ export const X01StatsScreen: React.FC = () => {
 
                                 <div>Darts Thrown:</div>
                                 <div className="font-bold text-right">
-                                    {stats.dartsThrown}
+                                    {stats.totalThrows}
                                 </div>
 
                                 {player.score === 0 && (
@@ -142,6 +142,11 @@ export const X01StatsScreen: React.FC = () => {
                                         <div>Highest Throw:</div>
                                         <div className="text-right">
                                             {playerProfile.stats.highestThrow}
+                                        </div>
+
+                                        <div>Worst Throw:</div>
+                                        <div className="text-right">
+                                            {playerProfile.stats.lowestThrow}
                                         </div>
 
                                         <div>Total 180s:</div>

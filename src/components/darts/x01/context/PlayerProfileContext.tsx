@@ -18,6 +18,7 @@ const defaultStats: PlayerStats = {
     gamesWon: 0,
     totalThrows: 0,
     highestThrow: 0,
+    lowestThrow: 0,
     highestCheckout: 0,
     averageThrow: 0,
     averagePerDart: 0,
@@ -105,6 +106,13 @@ export const PlayerProfileProvider: React.FC<{ children: React.ReactNode }> = ({
                         updatedStats.highestThrow = Math.max(
                             updatedStats.highestThrow,
                             gameStats.highestThrow as number,
+                        );
+                    }
+
+                    if ('lowestThrow' in gameStats && gameStats.lowestThrow) {
+                        updatedStats.lowestThrow = Math.min(
+                            updatedStats.lowestThrow === 0 ? Infinity : updatedStats.lowestThrow,
+                            gameStats.lowestThrow as number,
                         );
                     }
 

@@ -95,6 +95,15 @@ export const ProfileStatsModal: React.FC<ProfileStatsModalProps> = ({
                     </div>
 
                     <div className="bg-gray-50 p-4 rounded-lg">
+                        <div className="text-sm text-gray-500">
+                            Worst Throw
+                        </div>
+                        <div className="text-xl font-semibold">
+                            {profile.stats.lowestThrow}
+                        </div>
+                    </div>
+
+                    <div className="bg-gray-50 p-4 rounded-lg">
                         <div className="text-sm text-gray-500">Total 180s</div>
                         <div className="text-xl font-semibold">
                             {profile.stats.ton80s}

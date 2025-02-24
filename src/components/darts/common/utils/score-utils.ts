@@ -36,33 +36,34 @@ export const calculateDetailedStats = (
 ) => {
     if (!player.throws.length)
         return {
-            average: 0,
-            highest: 0,
-            lowest: 0,
-            dartsThrown: 0,
-            pointsPerDart: '0',
+            averageThrow: 0,
+            highestThrow: 0,
+            lowestThrow: 0,
+            totalThrows: 0,
+            averagePerDart: 0,
         };
 
     const throws = player.throws;
-    const average = throws.reduce((a, b) => a + b, 0) / throws.length;
-    const highest = Math.max(...throws);
-    const lowest = Math.min(...throws);
+    const averageThrow = throws.reduce((a, b) => a + b, 0) / throws.length;
+    const highestThrow = Math.max(...throws);
+    const throwsWithoutZeroes = throws.filter((t) => t !== 0);
+    const lowestThrow = Math.min(...throwsWithoutZeroes);
 
-    let dartsThrown = (throws.length - 1) * 3;
+    let totalThrows = (throws.length - 1) * 3;
     if (player.score === 0 && player.checkoutDart) {
-        dartsThrown += player.checkoutDart;
+        totalThrows += player.checkoutDart;
     } else {
-        dartsThrown += 3;
+        totalThrows += 3;
     }
 
     const totalScore = startingScore - player.score;
-    const pointsPerDart = totalScore / dartsThrown;
+    const averagePerDart = totalScore / totalThrows;
 
     return {
-        average: average.toFixed(1),
-        highest,
-        lowest,
-        dartsThrown,
-        pointsPerDart: pointsPerDart.toFixed(2),
+        averageThrow: averageThrow,
+        highestThrow,
+        lowestThrow,
+        totalThrows,
+        averagePerDart: averagePerDart,
     };
 };

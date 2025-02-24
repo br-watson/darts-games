@@ -49,11 +49,3 @@ export interface X01GameContextType {
     handleUndo: () => void;
     clearGameData: () => void;
 }
-
-export interface X01Stats {
-    average: string;
-    highest: number;
-    tons?: number;
-    ton40s?: number;
-    ton80s?: number;
-}

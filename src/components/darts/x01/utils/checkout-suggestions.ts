@@ -173,7 +173,7 @@ export const quickScores = [100, 60, 41, 26, 22, 11];
 
 export const calculateX01Stats = (player: Player) => {
     if (!player.throws.length)
-        return { average: '0', highest: 0, tons: 0, ton40s: 0, ton80s: 0 };
+        return { tons: 0, ton40s: 0, ton80s: 0 };
 
     const throws = player.throws;
     const tons = throws.filter((t) => t >= 100 && t < 140).length;

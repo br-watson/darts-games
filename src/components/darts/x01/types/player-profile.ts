@@ -3,6 +3,7 @@ export interface PlayerStats {
     gamesWon: number;
     totalThrows: number;
     highestThrow: number;
+    lowestThrow: number;
     highestCheckout: number;
     averageThrow: number;
     averagePerDart: number;

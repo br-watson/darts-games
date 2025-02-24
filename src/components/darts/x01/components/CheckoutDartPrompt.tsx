@@ -2,6 +2,9 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { useX01GameContext } from '../context/X01GameContext';
 import { usePlayerProfiles } from '@/components/darts/x01/context/PlayerProfileContext';
+import { PlayerStats } from '@/components/darts/x01/types/player-profile';
+import { calculateX01Stats } from '@/components/darts/x01/utils/checkout-suggestions';
+import { calculateDetailedStats } from '@/components/darts/common/utils/score-utils';
 
 export const CheckoutDartPrompt: React.FC = () => {
     const {
@@ -22,31 +25,14 @@ export const CheckoutDartPrompt: React.FC = () => {
             dartNumber;
 
         players.forEach((player, idx) => {
-            const dartsThrown =
-                (player.throws.length - 1) * 3 +
-                (idx === checkoutDartPrompt.playerIndex ? dartNumber : 3);
+            const x01Stats = calculateX01Stats(player);
+            const stats = calculateDetailedStats(player, startingScore);
 
-            const totalScore = startingScore - player.score;
-            const totalThrows = player.throws.length;
-
-            const averagePerThrow =
-                totalThrows > 0
-                    ? player.throws.reduce((a, b) => a + b, 0) / totalThrows
-                    : 0;
-
-            const averagePerDart =
-                dartsThrown > 0 ? totalScore / dartsThrown : 0;
-
-            const gameStats = {
+            const gameStats: Partial<PlayerStats> = {
                 gamesPlayed: 1,
                 gamesWon: idx === checkoutDartPrompt.playerIndex ? 1 : 0,
-                highestThrow: Math.max(...player.throws, 0),
-                ton80s: player.throws.filter((t) => t === 180).length,
-                ton40s: player.throws.filter((t) => t >= 140 && t < 180).length,
-                tons: player.throws.filter((t) => t >= 100 && t < 140).length,
-                averageThrow: averagePerThrow,
-                averagePerDart: averagePerDart,
-                totalThrows: dartsThrown,
+                ...stats,
+                ...x01Stats,
             };
 
             const playerProfile = profiles.find((p) => p.name === player.name);
