@@ -6,7 +6,7 @@ import React, {
     useCallback,
 } from 'react';
 import { Player, HistoryState } from '../../common/types/player';
-import { CelebrationState } from '../../common/types/ui-state';
+import { CelebrationState, WinningCelebrationState } from '../../common/types/ui-state';
 import { CheckoutDartPromptState, X01GameContextType } from '../types/types';
 import { calculateValidThreeDartScores } from '../../common/utils/score-utils';
 
@@ -42,6 +42,7 @@ export const X01GameProvider: React.FC<{ children: React.ReactNode }> = ({
     const [checkoutDartPrompt, setCheckoutDartPrompt] =
         useState<CheckoutDartPromptState | null>(null);
     const [showClearDataConfirm, setShowClearDataConfirm] = useState(false);
+    const [winningCelebration, setWinningCelebration] = useState<WinningCelebrationState | null>(null);
 
     const clearGameData = useCallback(() => {
         localStorage.clear();
@@ -56,6 +57,14 @@ export const X01GameProvider: React.FC<{ children: React.ReactNode }> = ({
             setCelebration({ show: false, message: '' });
         }, 3000);
     }, []);
+
+    const completeWinningCelebration = useCallback(() => {
+        if (winningCelebration) {
+            const winningPlayer = players[winningCelebration.playerIndex];
+            setWinner(winningPlayer);
+            setWinningCelebration(null);
+        }
+    }, [winningCelebration, players]);
 
     const addPlayer = useCallback(
         (name?: string) => {
@@ -225,6 +234,7 @@ export const X01GameProvider: React.FC<{ children: React.ReactNode }> = ({
         checkoutDartPrompt,
         validThreeDartScores,
         showClearDataConfirm,
+        winningCelebration,
 
         // State setters
         setGameStarted,
@@ -237,6 +247,7 @@ export const X01GameProvider: React.FC<{ children: React.ReactNode }> = ({
         setIsProcessingInput,
         setCheckoutDartPrompt,
         setShowClearDataConfirm,
+        setWinningCelebration,
 
         // Actions
         triggerCelebration,
@@ -247,6 +258,7 @@ export const X01GameProvider: React.FC<{ children: React.ReactNode }> = ({
         handleThrow,
         handleUndo,
         clearGameData,
+        completeWinningCelebration,
     };
 
     return (

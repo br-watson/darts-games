@@ -1,6 +1,6 @@
 import React from 'react';
 import { Player, HistoryState } from '../../common/types/player';
-import { CelebrationState } from '../../common/types/ui-state';
+import { CelebrationState, WinningCelebrationState } from '../../common/types/ui-state';
 
 export interface CheckoutDartPromptState {
     show: boolean;
@@ -24,6 +24,7 @@ export interface X01GameContextType {
     checkoutDartPrompt: CheckoutDartPromptState | null;
     validThreeDartScores: Set<number>;
     showClearDataConfirm: boolean;
+    winningCelebration: WinningCelebrationState | null;
 
     // State setters
     setGameStarted: React.Dispatch<React.SetStateAction<boolean>>;
@@ -38,6 +39,7 @@ export interface X01GameContextType {
         React.SetStateAction<CheckoutDartPromptState | null>
     >;
     setShowClearDataConfirm: React.Dispatch<React.SetStateAction<boolean>>;
+    setWinningCelebration: React.Dispatch<React.SetStateAction<WinningCelebrationState | null>>;
 
     // Actions
     triggerCelebration: (message: string) => void;
@@ -48,6 +50,7 @@ export interface X01GameContextType {
     handleThrow: (score: number | string) => void;
     handleUndo: () => void;
     clearGameData: () => void;
+    completeWinningCelebration: () => void;
 }
 
 export interface X01SpecificStats {

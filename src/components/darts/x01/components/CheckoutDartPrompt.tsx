@@ -14,6 +14,7 @@ export const CheckoutDartPrompt: React.FC = () => {
         setPlayers,
         setWinner,
         setCheckoutDartPrompt,
+        setWinningCelebration,
     } = useX01GameContext();
     const { profiles, updatePlayerStats } = usePlayerProfiles();
 
@@ -21,8 +22,7 @@ export const CheckoutDartPrompt: React.FC = () => {
 
     const handleDartSelection = (dartNumber: 1 | 2 | 3) => {
         const updatedPlayers = [...players];
-        updatedPlayers[checkoutDartPrompt.playerIndex].checkoutDart =
-            dartNumber;
+        updatedPlayers[checkoutDartPrompt.playerIndex].checkoutDart = dartNumber;
 
         players.forEach((player, idx) => {
             const x01Stats = calculateX01Stats(player);
@@ -42,8 +42,16 @@ export const CheckoutDartPrompt: React.FC = () => {
         });
 
         setPlayers(updatedPlayers);
-        setWinner(updatedPlayers[checkoutDartPrompt.playerIndex]);
+
         setCheckoutDartPrompt(null);
+
+        const winningPlayer = updatedPlayers[checkoutDartPrompt.playerIndex];
+        setWinningCelebration({
+            playerName: winningPlayer.name,
+            checkoutDart: dartNumber,
+            playerIndex: checkoutDartPrompt.playerIndex,
+            show: true
+        });
     };
 
     return (

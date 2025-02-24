@@ -4,9 +4,11 @@ import React from 'react';
 import { X01GameProvider, useX01GameContext } from './context/X01GameContext';
 import { X01StatsScreen } from './components/X01StatsScreen';
 import { X01Board } from './components/X01Board';
+import { WinningCelebration } from '@/components/darts/common/components/WinningCelebration';
+import { CelebrationAnimation } from '@/components/darts/common/components/CelebrationAnimation';
 
 const GameContent: React.FC = () => {
-    const { winner } = useX01GameContext();
+    const { winner, celebration } = useX01GameContext();
 
     return (
         <>
@@ -17,6 +19,10 @@ const GameContent: React.FC = () => {
             ) : (
                 <X01Board />
             )}
+            {celebration.show && (
+                <CelebrationAnimation celebration={celebration} />
+            )}
+            <WinningCelebration />
         </>
     );
 };
