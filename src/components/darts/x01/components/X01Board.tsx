@@ -62,21 +62,26 @@ export const X01Board: React.FC = () => {
             <CardContent>
                 {!gameStarted ? (
                     <div className="space-y-4">
-                        <div className="flex items-center gap-4">
-                            <Input
-                                type="number"
-                                value={startingScore}
-                                onChange={(e) => {
-                                    if (!isNaN(parseInt(e.target.value)))
-                                        setStartingScore(
-                                            parseInt(e.target.value),
-                                        );
-                                    else setStartingScore(0);
-                                }}
-                                className="w-32"
-                                min="101"
-                                step="100"
-                            />
+                        <div className="flex items-center gap-2">
+                            <div className="flex items-center">
+                                <Button
+                                    variant="outline"
+                                    className="rounded-r-none px-2 h-10"
+                                    onClick={() => setStartingScore(prev => Math.max(101, prev - 100))}
+                                >
+                                    -
+                                </Button>
+                                <div className="px-4 h-10 flex items-center justify-center border-y">
+                                    {startingScore}
+                                </div>
+                                <Button
+                                    variant="outline"
+                                    className="rounded-l-none px-2 h-10"
+                                    onClick={() => setStartingScore(prev => Math.min(9901, prev + 100))}
+                                >
+                                    +
+                                </Button>
+                            </div>
                             <span>Starting Score</span>
                         </div>
 
