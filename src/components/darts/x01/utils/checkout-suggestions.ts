@@ -173,8 +173,7 @@ export const getCheckoutSuggestion = (score: number): string => {
 export const quickScores = [100, 60, 41, 26, 22, 11];
 
 export const calculateX01Stats = (player: Player): X01SpecificStats => {
-    if (!player.throws.length)
-        return { tons: 0, ton40s: 0, ton80s: 0 };
+    if (!player.throws.length) return { tons: 0, ton40s: 0, ton80s: 0 };
 
     const throws = player.throws;
     const tons = throws.filter((t) => t >= 100 && t < 140).length;

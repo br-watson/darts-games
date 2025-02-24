@@ -1,6 +1,9 @@
 import React from 'react';
 import { Player, HistoryState } from '../../common/types/player';
-import { CelebrationState, WinningCelebrationState } from '../../common/types/ui-state';
+import {
+    CelebrationState,
+    WinningCelebrationState,
+} from '../../common/types/ui-state';
 
 export interface CheckoutDartPromptState {
     show: boolean;
@@ -39,7 +42,9 @@ export interface X01GameContextType {
         React.SetStateAction<CheckoutDartPromptState | null>
     >;
     setShowClearDataConfirm: React.Dispatch<React.SetStateAction<boolean>>;
-    setWinningCelebration: React.Dispatch<React.SetStateAction<WinningCelebrationState | null>>;
+    setWinningCelebration: React.Dispatch<
+        React.SetStateAction<WinningCelebrationState | null>
+    >;
 
     // Actions
     triggerCelebration: (message: string) => void;
