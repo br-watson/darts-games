@@ -105,10 +105,15 @@ export const X01GameProvider: React.FC<{ children: React.ReactNode }> = ({
 
     const startGame = useCallback(() => {
         if (players.length >= 1) {
+            const updatedPlayers = players.map(player => ({
+                ...player,
+                score: startingScore
+            }));
+            setPlayers(updatedPlayers);
             setGameStarted(true);
             setHistory([]);
         }
-    }, [players.length]);
+    }, [players.length, players, startingScore]);
 
     const resetGame = useCallback(() => {
         const resetPlayers = players.map((player) => ({
