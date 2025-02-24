@@ -5,18 +5,21 @@ import { useX01GameContext } from '@/components/darts/x01/context/X01GameContext
 export const WinningCelebration: React.FC = () => {
     const { winningCelebration, completeWinningCelebration } = useX01GameContext();
     const [animationPhase, setAnimationPhase] = useState(0);
+    const [animateConfetti, setAnimateConfetti] = useState(false);
 
     useEffect(() => {
         if (winningCelebration?.show) {
+            setAnimateConfetti(true);
+
             const phaseTimers = [
                 setTimeout(() => setAnimationPhase(1), 300),
                 setTimeout(() => setAnimationPhase(2), 1000),
                 setTimeout(() => completeWinningCelebration(), 6000)
             ];
-
             return () => phaseTimers.forEach(timer => clearTimeout(timer));
         } else {
             setAnimationPhase(0);
+            setAnimateConfetti(false);
         }
     }, [winningCelebration, completeWinningCelebration]);
 
@@ -35,28 +38,31 @@ export const WinningCelebration: React.FC = () => {
 
             const size = Math.random() * 10 + 5;
             const angle = Math.random() * Math.PI * 2;
-            const distance = Math.random() * 250 + 50;
+            const distance = Math.random() * 600 + 50;
             const x = Math.cos(angle) * distance;
             const y = Math.sin(angle) * distance;
             const color = colors[Math.floor(Math.random() * colors.length)];
-            const duration = (Math.random() * 2 + 2).toFixed(1);
+            const duration = (Math.random() * 4 + 2).toFixed(1);
             const delay = (Math.random() * 0.5).toFixed(2);
 
             return (
                 <div
                     key={i}
-                    className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full ${color} opacity-90`}
-                    style={{
-                        width: `${size}px`,
-                        height: `${size}px`,
-                        transform: `translate(-50%, -50%) translate(${x}px, ${y}px)`,
-                        animationName: 'confetti',
-                        animationDuration: `${duration}s`,
-                        animationTimingFunction: 'ease-out',
-                        animationIterationCount: 'infinite',
-                        animationDelay: `${delay}s`
-                    }}
-                />
+                    className="absolute left-1/2 top-1/2"
+                    style={{ transform: 'translate(-50%, -50%)' }}
+                >
+                    <div
+                        className={`rounded-full ${color} opacity-90`}
+                        style={{
+                            width: `${size}px`,
+                            height: `${size}px`,
+                            // If animateConfetti is true, transition to the randomized offset and fade out.
+                            transform: animateConfetti ? `translate(${x}px, ${y}px)` : 'translate(0, 0)',
+                            opacity: animateConfetti ? 0 : 1,
+                            transition: `transform ${duration}s ease-out ${delay}s, opacity ${duration}s ease-out ${delay}s`
+                        }}
+                    />
+                </div>
             );
         });
     };
@@ -69,7 +75,7 @@ export const WinningCelebration: React.FC = () => {
             {/* Subtle spotlight effect */}
             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[120vh] h-[120vh] rounded-full bg-gradient-to-br from-indigo-900/20 via-transparent to-purple-900/20 opacity-60 animate-pulse"></div>
 
-            {generateConfetti(80)}
+            {generateConfetti(500)}
 
             {/* Trophy with dedicated positioning */}
             <div className={`absolute z-10 left-1/2 -translate-x-1/2 transition-all duration-700 ${
@@ -130,10 +136,6 @@ export const WinningCelebration: React.FC = () => {
             </div>
 
             <style jsx>{`
-                @keyframes confetti {
-                    0% { transform: translate(-50%, -50%) translate(0, 0); opacity: 1; }
-                    100% { transform: translate(-50%, -50%) translate(0, 100px); opacity: 0; }
-                }
                 @keyframes bounce {
                     0%, 100% { transform: translateY(-25%); animation-timing-function: cubic-bezier(0.8, 0, 1, 1); }
                     50% { transform: translateY(0); animation-timing-function: cubic-bezier(0, 0, 0.2, 1); }
