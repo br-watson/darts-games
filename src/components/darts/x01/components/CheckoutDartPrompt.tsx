@@ -48,6 +48,7 @@ export const CheckoutDartPrompt: React.FC = () => {
         setWinningCelebration({
             playerName: winningPlayer.name,
             checkoutDart: dartNumber,
+            throws: winningPlayer.throws.length,
             playerIndex: checkoutDartPrompt.playerIndex,
             show: true
         });

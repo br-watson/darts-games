@@ -69,9 +69,8 @@ export const WinningCelebration: React.FC = () => {
 
     if (!winningCelebration?.show) return null;
 
-    const { playerName, checkoutDart } = winningCelebration;
-    const dartText =
-        checkoutDart === 1 ? '1st' : checkoutDart === 2 ? '2nd' : '3rd';
+    const { playerName, checkoutDart, throws } = winningCelebration;
+    const dartsThrown = (throws - 1) * 3 + checkoutDart;
 
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
@@ -135,7 +134,7 @@ export const WinningCelebration: React.FC = () => {
                         >
                             <div className="h-[2px] w-6 bg-gradient-to-r from-transparent to-amber-500"></div>
                             <span className="text-amber-400 font-medium">
-                {dartText} dart checkout
+                {dartsThrown} dart leg
               </span>
                             <div className="h-[2px] w-6 bg-gradient-to-l from-transparent to-amber-500"></div>
                         </div>
