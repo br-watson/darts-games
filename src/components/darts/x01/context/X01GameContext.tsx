@@ -113,7 +113,7 @@ export const X01GameProvider: React.FC<{ children: React.ReactNode }> = ({
             setGameStarted(true);
             setHistory([]);
         }
-    }, [players.length, players, startingScore]);
+    }, [players, startingScore]);
 
     const resetGame = useCallback(() => {
         const resetPlayers = players.map((player) => ({

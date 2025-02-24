@@ -12,7 +12,6 @@ export const CheckoutDartPrompt: React.FC = () => {
         players,
         startingScore,
         setPlayers,
-        setWinner,
         setCheckoutDartPrompt,
         setWinningCelebration,
     } = useX01GameContext();
