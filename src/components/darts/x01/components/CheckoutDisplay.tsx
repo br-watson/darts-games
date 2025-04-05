@@ -14,7 +14,7 @@ export const CheckoutDisplay: React.FC<CheckoutDisplayProps> = ({
         <div className="mt-2 p-2 bg-gradient-to-r from-green-100 to-blue-100 rounded-lg shadow-md">
             <div className="flex justify-center items-center space-x-2">
                 <div className="text-lg font-bold text-center mb-1">
-                    Checkout:{' '}
+                    {' '}
                 </div>
                 {parts.map((part: string, index: number) => {
                     const isTriple = part.startsWith('T');
