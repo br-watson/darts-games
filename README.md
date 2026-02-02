@@ -23,4 +23,4 @@ pnpm install
 pnpm run deploy
 ```
 
-GitHub Pages: [https://br-watson.github.io/darts-games](https://br-watson.github.io/darts-games/)
+GitHub Pages: [https://bwatson.uk/darts-games](https://bwatson.uk/darts-games/)
